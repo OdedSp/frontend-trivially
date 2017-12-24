@@ -8,7 +8,13 @@ const mutations = {}
 
 const actions = {}
 
-const getters = {}
+const getters = {
+    quest: state => {
+        // console.log(state)
+        var quests = state.questions
+        return quests[Math.floor(Math.random()*quests.length)]
+    }
+}
 
 
 export default {
