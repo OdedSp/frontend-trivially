@@ -4,12 +4,12 @@
     <button>Play</button>
     <button>Log In</button>
     <button>Sign Up</button>
-    <quest></quest>
+    <quest-screen></quest-screen>
   </div>
 </template>
 
 <script>
-import Quest from "./Quest.vue";
+import QuestScreen from './QuestScreen';
 
 export default {
   name: 'HomePage',
@@ -18,7 +18,9 @@ export default {
       
     }
   },
-  components: Quest
+  components: {
+    QuestScreen
+    }
 }
 </script>
 
