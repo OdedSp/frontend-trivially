@@ -1,9 +1,11 @@
 import Vuex from 'vuex'
-import user from './modules/user'
+import userModule from './modules/user.module'
+import triviaModule from './modules/trivia.module'
 
 const store = new Vuex.Store({
     modules: {
-        user
+        userModule,
+        triviaModule
     },
     strict: true
 })
