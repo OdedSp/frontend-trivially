@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h2>{{quest.question}}</h2>
+      <h2 v-html="quest.question"></h2>
       <button>{{quest.incorrect_answers[1]}}</button>
       <button>{{quest.incorrect_answers[2]}}</button>
       <button>{{quest.incorrect_answers[0]}}</button>
