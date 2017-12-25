@@ -13,11 +13,13 @@
   },
   "dependencies": {
     "animate.css": "^3.5.2",
+    "bulma": "^0.6.1",
     "node-sass": "^4.7.2",
     "normalize.css": "^7.0.0",
     "sass-loader": "^6.0.6",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
+    "vee-validate": "^2.0.0-rc.27",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"

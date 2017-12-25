@@ -6,6 +6,7 @@
       <button>Log In</button>
       <button>Sign Up</button>
     </section>
+    <sign-up v-if="signUpShow"></sign-up>
     <count-down :category="quests[currQuestIdx].category" v-if="countDown"></count-down>
     <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" v-if="questReady"></quest-cmp>
   </div>
@@ -14,6 +15,7 @@
 <script>
 import QuestCmp from './QuestCmp';
 import CountDown from './CountDown';
+import SignUp from './SignUp';
 
 export default {
   name: 'HomePage',
@@ -22,6 +24,7 @@ export default {
       isGameOn: false,
       countDown: false,
       questReady: false,
+      signUpShow: false,
       quests: this.$store.state.triviaModule.questions,
       currQuestIdx: 0
     }
@@ -30,10 +33,8 @@ export default {
     questAnswered(result, time){
       console.log(result, time);
       if (this.currQuestIdx !== this.quests.length - 1) {
-        this.questReady = false
-        this.countDown = true
+        this.reviewAnswer()
         this.getReady()
-        this.currQuestIdx++;
       } 
     },
     startGame(){
@@ -46,11 +47,19 @@ export default {
         this.countDown = false
         this.questReady = true
       }, 2000);
+    },
+    reviewAnswer(){
+      setTimeout(() => {
+        this.countDown = true
+        this.questReady = false
+        this.currQuestIdx++;
+      }, 1200);
     }
   },
   components: {
     QuestCmp,
-    CountDown
+    CountDown,
+    SignUp
     }
 }
 </script>

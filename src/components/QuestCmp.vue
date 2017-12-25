@@ -30,19 +30,13 @@ export default {
   },
   methods: {
       answerChosen(answer) {
-        console.log("chose an answer");
         if (this.userAnswer) return
         this.userAnswer = answer
         if (answer === this.quest.correct_answer) {
             EventBus.$emit(RIGHT_ANSWER)
-            setTimeout(() => {
-                this.$emit('answerChosen', true, this.answerTime())
-            }, 2000);
+            this.$emit('answerChosen', true, this.answerTime())
         } else {
-            this.isCorrect = false
-            setTimeout(() => {
-                this.$emit('answerChosen', false, this.answerTime())
-            }, 2000);
+            this.$emit('answerChosen', false, this.answerTime())
         }
     },
     shuffleAnswers() {
