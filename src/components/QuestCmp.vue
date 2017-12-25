@@ -1,8 +1,8 @@
 <template>
   <div>
       <h2 v-html="quest.question"></h2>
-      <button v-for="answer in answers" @click="answerChosen(answer)"
-      v-html="answer"
+      <button v-for="(answer, i) in answers" @click="answerChosen(answer)"
+      v-html="answer" :key="i"
       :class="{ correct: answer === quest.correct_answer && userAnswer === answer,
                 incorrect: answer !== quest.correct_answer && userAnswer === answer }"></button>
   </div>
@@ -14,7 +14,6 @@ export default {
   data() {
       return {
         startTime: null,
-        // isCorrect: null,
         userAnswer: null
     };
   },
@@ -30,7 +29,6 @@ export default {
         this.answered = true
         this.userAnswer = answer
         if (answer === this.quest.correct_answer) {
-            // this.isCorrect = true
             setTimeout(() => {
                 this.$emit('answerChosen', true, this.answerTime())
             }, 2000);
@@ -49,13 +47,13 @@ export default {
       answers.push(this.quest.correct_answer);
       
       for (let i = answers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        let j = Math.floor(Math.random() * (i + 1));
         [answers[i], answers[j]] = [answers[j], answers[i]];
       }
       return answers
     },
     answerTime() {
-        return (Date.now()-this.startTime)/1000
+        return (Date.now() - this.startTime) / 1000
     }
   },
   created(){
