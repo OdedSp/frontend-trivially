@@ -1,7 +1,10 @@
 <template>
   <div>
       <h2 v-html="quest.question"></h2>
-      <button v-for="answer in answers" @click="answerChosen(answer)" v-html="answer"></button>
+      <button v-for="answer in answers" @click="answerChosen(answer)"
+      v-html="answer"
+      :class="{ correct: answer === quest.correct_answer && userAnswer === answer,
+                incorrect: answer !== quest.correct_answer && userAnswer === answer }"></button>
   </div>
 </template>
 
@@ -10,7 +13,9 @@ export default {
   name: "QuestScreen",
   data() {
       return {
-        startTime: null
+        startTime: null,
+        // isCorrect: null,
+        userAnswer: null
     };
   },
   props: ["quest"],
@@ -22,10 +27,18 @@ export default {
   methods: {
       answerChosen(answer) {
         console.log("chose an answer");
+        this.answered = true
+        this.userAnswer = answer
         if (answer === this.quest.correct_answer) {
-            this.$emit('answerChosen', true, this.answerTime())
+            // this.isCorrect = true
+            setTimeout(() => {
+                this.$emit('answerChosen', true, this.answerTime())
+            }, 2000);
         } else {
-            this.$emit('answerChosen', false, this.answerTime())
+            this.isCorrect = false
+            setTimeout(() => {
+                this.$emit('answerChosen', false, this.answerTime())
+            }, 2000);
         }
     },
     shuffleAnswers() {
@@ -52,5 +65,10 @@ export default {
 </script>
 
 <style>
-
+.correct {
+    background: green
+}
+.incorrect {
+    background: red
+}
 </style>
