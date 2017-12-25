@@ -6,21 +6,21 @@
       <button>Log In</button>
       <button>Sign Up</button>
     </section>
-    <load-screen :category="quests[currQuestIdx].category" v-if="loadScreen"></load-screen>
-    <quest-screen :quest="quests[currQuestIdx]" @answerChosen="questAnswered" v-if="questReady"></quest-screen>
+    <count-down :category="quests[currQuestIdx].category" v-if="countDown"></count-down>
+    <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" v-if="questReady"></quest-cmp>
   </div>
 </template>
 
 <script>
-import QuestScreen from './QuestScreen';
-import LoadScreen from './LoadScreen';
+import QuestCmp from './QuestCmp';
+import CountDown from './CountDown';
 
 export default {
   name: 'HomePage',
   data () {
     return {
       isGameOn: false,
-      loadScreen: false,
+      countDown: false,
       questReady: false,
       quests: this.$store.state.triviaModule.questions,
       currQuestIdx: 0
@@ -30,25 +30,27 @@ export default {
     questAnswered(result, time){
       console.log(result, time);
       if (this.currQuestIdx !== this.quests.length - 1) {
+        this.questReady = false
+        this.countDown = true
         this.getReady()
         this.currQuestIdx++;
       } 
     },
     startGame(){
       this.isGameOn = true
-      this.loadScreen = true
+      this.countDown = true
       this.getReady()
     },
     getReady(){
       setTimeout(() => {
-        this.loadScreen = false
+        this.countDown = false
         this.questReady = true
-      }, 5);
+      }, 1500);
     }
   },
   components: {
-    QuestScreen,
-    LoadScreen
+    QuestCmp,
+    CountDown
     }
 }
 </script>

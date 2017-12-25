@@ -3,7 +3,7 @@ import TriviaService from '../services/TriviaService'
 export const SET_GAME_ON = 'trivia/setGameOn'
 
 const state = {
-    questions: TriviaService.getMock().slice(0,5),
+    questions: TriviaService.getMock().slice(10,15),
     isGameOn: false
 }
 
