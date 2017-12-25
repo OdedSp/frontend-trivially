@@ -3,7 +3,7 @@
     <section class="game-start" v-if="!isGameOn">
       <h1>TriVue</h1>
       <button @click="startGame">Play</button>
-      <button>Log In</button>
+      <button @click="openSignUp">Log In</button>
       <button>Sign Up</button>
     </section>
     <sign-up v-if="signUpShow"></sign-up>
@@ -30,6 +30,9 @@ export default {
     }
   },
   methods:{
+    openSignUp(){
+      this.signUpShow = !this.signUpShow
+    },
     questAnswered(result, time){
       console.log(result, time);
       if (this.currQuestIdx !== this.quests.length - 1) {
