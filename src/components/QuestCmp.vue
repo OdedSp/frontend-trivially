@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="question-wrapper">
       <h2 v-html="quest.question"></h2>
       <button v-for="(answer, i) in answers" @click="answerChosen(answer)"
       :key="i" v-html="answer" class="answer-option"></button>
@@ -12,8 +12,7 @@ export default {
   data() {
       return {
         startTime: null,
-        // answerTime: null
-    };
+    }
   },
   props: ["quest"],
   computed: {
@@ -44,10 +43,10 @@ export default {
       return answers
     },
     answerTime() {
-        return (Date.now() - this.startTime) / 1000
+        return Math.floor((Date.now() - this.startTime) / 500) // in steps of half a second
     }
   },
-  created(){
+  created() {
       this.startTime = Date.now()
   }
 };
