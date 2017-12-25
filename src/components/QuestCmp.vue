@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import EventBus, { RIGHT_ANSWER } from '../services/BusService'
+
 export default {
   name: "QuestScreen",
   data() {
@@ -31,6 +33,7 @@ export default {
         if (this.userAnswer) return
         this.userAnswer = answer
         if (answer === this.quest.correct_answer) {
+            EventBus.$emit(RIGHT_ANSWER)
             this.$emit('answerChosen', true, this.answerTime())
         } else {
             this.$emit('answerChosen', false, this.answerTime())
