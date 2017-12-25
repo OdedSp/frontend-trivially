@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import EventBus, {RIGHT_ANSWER} from './services/BusService'
+
 export default {
   name: 'app',
   data() {
@@ -16,14 +18,19 @@ export default {
       showPyro: false
     }
   },
-  
+  methods: {
+    turnOnPyro() {
+      this.showPyro = true
+      setTimeout(_=> this.showPyro = false, 2000)
+    }
+  },
   created() {
-    EventBus.$on('rightAnswer', turnOnPyro)
+    EventBus.$on(RIGHT_ANSWER, this.turnOnPyro)
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -31,5 +38,14 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.pyro {
+  position: absolute;
+  top: 30vh;
+  width: 100vw;
+  .before, .after {
+    z-index: -1;
+  } 
 }
 </style>
