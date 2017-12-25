@@ -1,7 +1,8 @@
 <template>
   <div>
       <h2 v-html="quest.question"></h2>
-      <button v-for="answer in answers" @click="answerChosen(answer)" v-html="answer"></button>
+      <button v-for="(answer, i) in answers" @click="answerChosen(answer)"
+      :key="i" v-html="answer" class="answer-option"></button>
   </div>
 </template>
 
@@ -10,7 +11,8 @@ export default {
   name: "QuestScreen",
   data() {
       return {
-        startTime: null
+        startTime: null,
+        // answerTime: null
     };
   },
   props: ["quest"],
@@ -36,13 +38,13 @@ export default {
       answers.push(this.quest.correct_answer);
       
       for (let i = answers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        let j = Math.floor(Math.random() * (i + 1));
         [answers[i], answers[j]] = [answers[j], answers[i]];
       }
       return answers
     },
     answerTime() {
-        return (Date.now()-this.startTime)/1000
+        return (Date.now() - this.startTime) / 1000
     }
   },
   created(){
