@@ -26,7 +26,7 @@ export default {
   methods: {
       answerChosen(answer) {
         console.log("chose an answer");
-        this.answered = true
+        if (this.userAnswer) return
         this.userAnswer = answer
         if (answer === this.quest.correct_answer) {
             setTimeout(() => {
