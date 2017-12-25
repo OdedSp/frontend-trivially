@@ -2,7 +2,9 @@
   <div class="question-wrapper">
       <h2 v-html="quest.question"></h2>
       <button v-for="(answer, i) in answers" @click="answerChosen(answer)"
-      :key="i" v-html="answer" class="answer-option"></button>
+      v-html="answer" :key="i"
+      :class="{ correct: answer === quest.correct_answer && userAnswer === answer,
+                incorrect: answer !== quest.correct_answer && userAnswer === answer }"></button>
   </div>
 </template>
 
@@ -12,7 +14,8 @@ export default {
   data() {
       return {
         startTime: null,
-    }
+        userAnswer: null
+    };
   },
   props: ["quest"],
   computed: {
@@ -23,10 +26,17 @@ export default {
   methods: {
       answerChosen(answer) {
         console.log("chose an answer");
+        this.answered = true
+        this.userAnswer = answer
         if (answer === this.quest.correct_answer) {
-            this.$emit('answerChosen', true, this.answerTime())
+            setTimeout(() => {
+                this.$emit('answerChosen', true, this.answerTime())
+            }, 2000);
         } else {
-            this.$emit('answerChosen', false, this.answerTime())
+            this.isCorrect = false
+            setTimeout(() => {
+                this.$emit('answerChosen', false, this.answerTime())
+            }, 2000);
         }
     },
     shuffleAnswers() {
@@ -53,5 +63,10 @@ export default {
 </script>
 
 <style>
-
+.correct {
+    background: green
+}
+.incorrect {
+    background: red
+}
 </style>

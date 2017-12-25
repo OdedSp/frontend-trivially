@@ -45,7 +45,7 @@ export default {
       setTimeout(() => {
         this.countDown = false
         this.questReady = true
-      }, 1500);
+      }, 2000);
     }
   },
   components: {
