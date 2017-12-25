@@ -1,10 +1,13 @@
 <template>
   <div class="question-wrapper">
-      <h2 v-html="quest.question"></h2>
-      <button v-for="(answer, i) in answers" @click="answerChosen(answer)"
-      v-html="answer" :key="i"
-      :class="{ correct: answer === quest.correct_answer && userAnswer === answer,
-                incorrect: answer !== quest.correct_answer && userAnswer === answer }"></button>
+      <h2 v-html="quest.question" class="question"></h2>
+      <div class="answer-wrapper">
+        <button v-for="(answer, i) in answers" @click="answerChosen(answer)"
+        v-html="answer" :key="i"
+        :class="{ 'correct animated rubberBand': answer === quest.correct_answer && userAnswer === answer,
+                  'incorrect animated shake': answer !== quest.correct_answer && userAnswer === answer }"
+        class="answer"></button>
+      </div>
   </div>
 </template>
 
@@ -53,7 +56,7 @@ export default {
       return answers
     },
     answerTime() {
-        return Math.floor((Date.now() - this.startTime) / 500) // in steps of half a second
+        return Math.floor((Date.now() - this.startTime) / 1000)
     }
   },
   created() {
@@ -62,11 +65,35 @@ export default {
 };
 </script>
 
-<style>
-.correct {
-    background: green
+<style scoped lang="scss">
+
+.question-wrapper {
+    width: 95vw;
+    margin: auto;
 }
-.incorrect {
-    background: red
+
+.answer-wrapper {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    .answer {
+        // width: 100%;
+        outline: none;
+        border-style: none;
+        padding: 10px;
+        margin: 15px;
+        background-color: lightsteelblue;
+        border-radius: 5px;
+        box-shadow: 0 0 4px gray;
+        &.correct {
+            background: green
+        }
+        &.incorrect {
+            background: red
+        }
+    }
 }
+
+
 </style>

@@ -1,12 +1,25 @@
 <template>
   <div id="app">
     <router-view/>
+    <div :class="{ pyro: showPyro }">
+      <div class="before"></div>
+      <div class="after"></div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data() {
+    return {
+      showPyro: false
+    }
+  },
+  
+  created() {
+    EventBus.$on('rightAnswer', turnOnPyro)
+  }
 }
 </script>
 
