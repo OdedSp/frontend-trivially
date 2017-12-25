@@ -1,25 +1,54 @@
 <template>
   <div>
-    <h1>TriVue</h1>
-    <button>Play</button>
-    <button>Log In</button>
-    <button>Sign Up</button>
-    <quest-screen></quest-screen>
+    <section class="game-start" v-if="!isGameOn">
+      <h1>TriVue</h1>
+      <button @click="startGame">Play</button>
+      <button>Log In</button>
+      <button>Sign Up</button>
+    </section>
+    <load-screen :category="quests[currQuestIdx].category" v-if="loadScreen"></load-screen>
+    <quest-screen :quest="quests[currQuestIdx]" @answerChosen="questAnswered" v-if="questReady"></quest-screen>
   </div>
 </template>
 
 <script>
 import QuestScreen from './QuestScreen';
+import LoadScreen from './LoadScreen';
 
 export default {
   name: 'HomePage',
   data () {
     return {
-      
+      isGameOn: false,
+      loadScreen: false,
+      questReady: false,
+      quests: this.$store.state.triviaModule.questions,
+      currQuestIdx: 0
+    }
+  },
+  methods:{
+    questAnswered(result, time){
+      console.log(result, time);
+      if (this.currQuestIdx !== this.quests.length - 1) {
+        this.getReady()
+        this.currQuestIdx++;
+      } 
+    },
+    startGame(){
+      this.isGameOn = true
+      this.loadScreen = true
+      this.getReady()
+    },
+    getReady(){
+      setTimeout(() => {
+        this.loadScreen = false
+        this.questReady = true
+      }, 5);
     }
   },
   components: {
-    QuestScreen
+    QuestScreen,
+    LoadScreen
     }
 }
 </script>

@@ -1,12 +1,21 @@
-import { getMock } from '../services/QuestService'
+import TriviaService from '../services/TriviaService'
+
+export const SET_GAME_ON = 'trivia/setGameOn'
 
 const state = {
-    questions: getMock()
+    questions: TriviaService.getMock().slice(0,5),
+    isGameOn: false
 }
 
 const mutations = {}
 
-const actions = {}
+const actions = {
+    [SET_GAME_ON](state, boolean) {
+        if (boolean){
+            
+        }
+    }
+ }
 
 const getters = {
     quest: state => {
