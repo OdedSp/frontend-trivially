@@ -25,18 +25,12 @@ export default {
   },
   methods: {
       answerChosen(answer) {
-        console.log("chose an answer");
         if (this.userAnswer) return
         this.userAnswer = answer
         if (answer === this.quest.correct_answer) {
-            setTimeout(() => {
-                this.$emit('answerChosen', true, this.answerTime())
-            }, 2000);
+            this.$emit('answerChosen', true, this.answerTime())
         } else {
-            this.isCorrect = false
-            setTimeout(() => {
-                this.$emit('answerChosen', false, this.answerTime())
-            }, 2000);
+            this.$emit('answerChosen', false, this.answerTime())
         }
     },
     shuffleAnswers() {
@@ -53,7 +47,7 @@ export default {
       return answers
     },
     answerTime() {
-        return Math.floor((Date.now() - this.startTime) / 500) // in steps of half a second
+        return Math.floor((Date.now() - this.startTime) / 1000) // in steps of half a second
     }
   },
   created() {

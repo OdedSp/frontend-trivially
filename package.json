@@ -12,8 +12,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "bulma": "^0.6.1",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
+    "vee-validate": "^2.0.0-rc.27",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
