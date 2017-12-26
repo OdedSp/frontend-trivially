@@ -1,11 +1,13 @@
 
 const state = {
-    name: 'sideny chen oded'
+    currUser: 'guest'
 }
 
 const mutations = {}
 
-const actions = {}
+const actions = {
+    
+}
 
 const getters = {}
 

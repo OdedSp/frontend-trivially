@@ -21,8 +21,10 @@
           <input v-model="confirmation" type="password" name="confirm" v-validate="'required|confirmed:password'" data-vv-as="password"
           :class="{'input': true, 'is-danger': errors.has('password') }" placeholder="Password, again" required>
         </p>
-        <button class="button is-success" @submit="sendUser">✓</button>
-        <span class="button is-danger" @click="closeComp">X</span>
+        <div class="buttons">
+          <button class="button is-light" @submit="sendUser">✓</button>
+          <button class="button is-dark" @click="closeComp">X</button>
+        </div>
       </form>
     </div>
 </template>

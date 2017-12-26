@@ -12,8 +12,10 @@
           :class="{'input': true, 'is-danger': errors.has('password') }" placeholder="Password" required>
           <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
         </p>
-        <button class="button is-success" @submit="sendUser">✓</button>
-        <span class="button is-danger" @click="closeComp">X</span>
+        <div class="buttons">
+          <button class="button is-light" @submit="sendUser">✓</button>
+          <button class="button is-dark" @click="closeComp">X</button>
+        </div>
       </form>
     </div>
 </template>

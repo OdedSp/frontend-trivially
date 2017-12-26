@@ -2,14 +2,14 @@
   <div>
     <section class="game-start" v-if="!isGameOn">
       <h1>TriVue</h1>
-      <button @click="startGame">Play</button>
-      <button @click="loginShow=!loginShow">Log In</button>
-      <button @click="signUpShow=!signUpShow">Sign Up</button>
+      <button class="button is-success" @click="startGame">Play</button>
+      <button class="button is-primary" @click="openLogin">Log In</button>
+      <button class="button is-info" @click="openSignUp">Sign Up</button>
     </section>
     <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
     <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>    
     <count-down :category="quests[currQuestIdx].category" v-if="countDown"></count-down>
-    <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" v-if="questReady"></quest-cmp>
+    <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" @lastQuest="endGame" v-if="questReady" ></quest-cmp>
   </div>
 </template>
 
@@ -35,13 +35,24 @@ export default {
   methods:{
     openSignUp(){
       this.signUpShow = !this.signUpShow
+      if (this.loginShow) {
+        this.loginShow = false
+      }
+    },
+    openLogin() {
+      this.loginShow = !this.loginShow
+      if (this.signUpShow) {
+        this.signUpShow = false
+      }
     },
     questAnswered(result, time){
       console.log(result, time);
       if (this.currQuestIdx !== this.quests.length - 1) {
         this.reviewAnswer()
         this.getReady()
-      } 
+      } else {
+        this.endGame()
+      }
     },
     startGame(){
       this.isGameOn = true
@@ -61,12 +72,18 @@ export default {
         this.currQuestIdx++;
       }, 1200);
     },
+    endGame(){
+      setTimeout(() => {
+        this.questReady = false
+        this.isGameOn = false
+      }, 1200);
+    },
     createUser(userObj) {
-      console.log(userObj);
+      
       this.signUpShow = false
     },
     loginUser (userObj) {
-      console.log(userObj);
+      
       this.loginShow = false
     }
   },
