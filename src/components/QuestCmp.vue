@@ -1,11 +1,12 @@
 <template>
   <div class="question-wrapper">
-      <h2 v-html="quest.question" class="question"></h2>
+      <h2 v-html="quest.question" class="question animated slideInDown"></h2>
       <div class="answer-wrapper">
         <button v-for="(answer, i) in answers" @click="answerChosen(answer)"
         v-html="answer" :key="i"
         :class="{ 'correct animated rubberBand': answer === quest.correct_answer && userAnswer === answer,
-                  'incorrect animated shake': answer !== quest.correct_answer && userAnswer === answer }"
+                  'incorrect animated shake': answer !== quest.correct_answer && userAnswer === answer,
+                  'animated flipInX': !userAnswer }"
         class="answer"></button>
       </div>
   </div>
@@ -67,6 +68,9 @@ export default {
 .question-wrapper {
     width: 95vw;
     margin: auto;
+    h2 {
+        font-weight: bold
+    }
 }
 
 .answer-wrapper {
@@ -76,11 +80,12 @@ export default {
     width: 85%;
     .answer {
         // width: 100%;
+        z-index: 1;
         outline: none;
         border-style: none;
         padding: 10px;
         margin: 15px;
-        background-color: lightsteelblue;
+        background-color: lightblue;
         border-radius: 5px;
         box-shadow: 0 0 4px gray;
         &.correct {

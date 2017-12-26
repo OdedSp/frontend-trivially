@@ -36,7 +36,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: whitesmoke;
   margin-top: 60px;
 }
 
@@ -44,8 +44,8 @@ export default {
   position: absolute;
   top: 30vh;
   width: 100vw;
-  .before, .after {
-    z-index: -1;
-  } 
+  // .before, .after {
+  //   z-index: -1;
+  // } 
 }
 </style>

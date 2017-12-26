@@ -1,27 +1,53 @@
 <template>
   <div>
-    <section class="game-start" v-if="!isGameOn">
-      <h1>TriVue</h1>
-      <button class="button is-success" @click="startGame">Play</button>
-      <button class="button is-primary" @click="openLogin">Log In</button>
+    <div v-if="!currUser" class="buttons">
+      <button class="button is-info" @click="openLogin">Log In</button>
       <button class="button is-info" @click="openSignUp">Sign Up</button>
+    </div>
+    <div v-else class="score">
+      <div class="user">
+        <p>{{currUser.name}}</p>
+        <p v-if="isGameOn">pnts</p>
+      </div>
+      <div v-if="isGameOn" class="opponent">
+        <p>opponent name</p>
+        <p>pnts</p>
+      </div>
+    </div>
+    <section class="game-start" v-if="!isGameOn">
+      <section class="hero is-primary">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              trivial travesty!
+            </h1>
+            <h2 class="subtitle">
+              A titillating trivia tournament that'll turn timid twits to talented thinkers!
+            </h2>
+          </div>
+        </div>
+      </section>
+      <button class="button is-success play-button" @click="startGame">Play</button>
     </section>
     <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
     <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>    
     <count-down :category="quests[currQuestIdx].category" v-if="countDown"></count-down>
-    <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" @lastQuest="endGame" v-if="questReady" ></quest-cmp>
+    <transition
+      leave-active-class="animated slideOutRight">
+      <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" @lastQuest="endGame" v-if="questReady" ></quest-cmp>
+    </transition>
   </div>
 </template>
 
 <script>
-import QuestCmp from './QuestCmp';
-import CountDown from './CountDown';
-import SignUp from './SignUp';
-import LogIn from './LogIn';
+import QuestCmp from "./QuestCmp";
+import CountDown from "./CountDown";
+import SignUp from "./SignUp";
+import LogIn from "./LogIn";
 
 export default {
-  name: 'HomePage',
-  data () {
+  name: "HomePage",
+  data() {
     return {
       isGameOn: false,
       countDown: false,
@@ -30,61 +56,78 @@ export default {
       loginShow: false,
       quests: this.$store.state.triviaModule.questions,
       currQuestIdx: 0
+    };
+  },
+  computed: {
+    currUser() {
+      return this.$store.getters.currUser
     }
   },
-  methods:{
-    openSignUp(){
-      this.signUpShow = !this.signUpShow
+  methods: {
+    openSignUp() {
+      this.signUpShow = !this.signUpShow;
       if (this.loginShow) {
-        this.loginShow = false
+        this.loginShow = false;
       }
     },
     openLogin() {
-      this.loginShow = !this.loginShow
+      this.loginShow = !this.loginShow;
       if (this.signUpShow) {
-        this.signUpShow = false
+        this.signUpShow = false;
       }
     },
-    questAnswered(result, time){
+    questAnswered(result, time) {
       console.log(result, time);
       if (this.currQuestIdx !== this.quests.length - 1) {
-        this.reviewAnswer()
-        this.getReady()
+        this.reviewAnswer();
+        this.getReady();
       } else {
-        this.endGame()
+        this.endGame();
       }
     },
-    startGame(){
-      this.isGameOn = true
-      this.countDown = true
-      this.getReady()
+    startGame() {
+      this.loginShow = false;
+      this.signUpShow = false;
+      if (!this.currUser) {
+        this.createGuest()
+      }
+      this.isGameOn = true;
+      this.countDown = true;
+      this.getReady();
     },
-    getReady(){
+    getReady() {
       setTimeout(() => {
-        this.countDown = false
-        this.questReady = true
+        this.countDown = false;
+        this.questReady = true;
       }, 2000);
     },
-    reviewAnswer(){
+    reviewAnswer() {
       setTimeout(() => {
-        this.countDown = true
-        this.questReady = false
+        this.countDown = true;
+        this.questReady = false;
         this.currQuestIdx++;
       }, 1200);
     },
-    endGame(){
+    endGame() {
       setTimeout(() => {
-        this.questReady = false
-        this.isGameOn = false
+        this.questReady = false;
+        this.isGameOn = false;
+        this.currQuestIdx = 0;
       }, 1200);
     },
     createUser(userObj) {
-      
-      this.signUpShow = false
+      this.$store.dispatch("addUser", userObj);
+      this.signUpShow = false;
     },
-    loginUser (userObj) {
-      
-      this.loginShow = false
+    loginUser(userObj) {
+      this.$store.dispatch("loginUser", userObj);
+      this.loginShow = false;
+    },
+    createGuest() {
+      var guest = {
+        name: 'guest'
+      }
+      this.createUser(guest)
     }
   },
   components: {
@@ -92,14 +135,15 @@ export default {
     CountDown,
     SignUp,
     LogIn
-    }
-}
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
+h1 {
+  font-weight: bold;
+  text-transform: uppercase;
 }
 ul {
   list-style-type: none;
@@ -112,4 +156,8 @@ li {
 a {
   color: #42b983;
 }
+.play-button{
+  margin: 15px
+}
+
 </style>

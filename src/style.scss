@@ -1,9 +1,10 @@
 @import './scss/vendor';
 
 body {
+    min-height: 100vh;
     margin:0;
     padding:10px;
-    background: #000;
+    background: rgb(0, 0, 46);
     overflow: hidden;
 }
 
@@ -27,6 +28,12 @@ form {
         justify-content: center;
         margin-bottom: 10px
     }
+}
+
+.score {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px
 }
 
 // * {

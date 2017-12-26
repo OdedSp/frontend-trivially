@@ -1,15 +1,43 @@
+import UserService from '../services/UserService'
 
 const state = {
-    currUser: 'guest'
+    currUser: null
 }
 
-const mutations = {}
+const mutations = {
+    setUser(state, user) {
+        state.currUser = user
+    }
+}
 
 const actions = {
-    
+    addUser(store, userObj) {
+        return UserService.newUser(userObj)
+        .then (user => {
+            store.commit('setUser', user)
+        })
+        .catch (err => {
+            console.log(err);
+            store.commit('setUser', {name: 'guest'})
+        })
+    },
+    loginUser(store, userObj) {
+        return UserService.loginUser(userObj)
+        .then (user => {
+            store.commit('setUser', user)
+        })
+        .catch (err => {
+            console.log(err);
+            store.commit('setUser', {name: 'guest'})
+        })
+    }
 }
 
-const getters = {}
+const getters = {
+    currUser: state => {
+        return state.currUser
+    }
+}
 
 
 export default {
