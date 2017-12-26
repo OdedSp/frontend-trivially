@@ -3,10 +3,10 @@
     <section class="game-start" v-if="!isGameOn">
       <h1>TriVue</h1>
       <button @click="startGame">Play</button>
-      <button @click="openSignUp">Log In</button>
-      <button>Sign Up</button>
+      <button>Log In</button>
+      <button @click="openSignUp">Sign Up</button>
     </section>
-    <sign-up v-if="signUpShow"></sign-up>
+    <sign-up v-if="signUpShow" @closeComp="signUpShow=false"></sign-up>
     <count-down :category="quests[currQuestIdx].category" v-if="countDown"></count-down>
     <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" v-if="questReady"></quest-cmp>
   </div>
