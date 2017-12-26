@@ -3,10 +3,11 @@
     <section class="game-start" v-if="!isGameOn">
       <h1>TriVue</h1>
       <button @click="startGame">Play</button>
-      <button>Log In</button>
-      <button @click="openSignUp">Sign Up</button>
+      <button @click="loginShow=!loginShow">Log In</button>
+      <button @click="signUpShow=!signUpShow">Sign Up</button>
     </section>
-    <sign-up v-if="signUpShow" @closeComp="signUpShow=false"></sign-up>
+    <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
+    <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>    
     <count-down :category="quests[currQuestIdx].category" v-if="countDown"></count-down>
     <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" v-if="questReady"></quest-cmp>
   </div>
@@ -16,6 +17,7 @@
 import QuestCmp from './QuestCmp';
 import CountDown from './CountDown';
 import SignUp from './SignUp';
+import LogIn from './LogIn';
 
 export default {
   name: 'HomePage',
@@ -25,6 +27,7 @@ export default {
       countDown: false,
       questReady: false,
       signUpShow: false,
+      loginShow: false,
       quests: this.$store.state.triviaModule.questions,
       currQuestIdx: 0
     }
@@ -57,12 +60,21 @@ export default {
         this.questReady = false
         this.currQuestIdx++;
       }, 1200);
+    },
+    createUser(userObj) {
+      console.log(userObj);
+      this.signUpShow = false
+    },
+    loginUser (userObj) {
+      console.log(userObj);
+      this.loginShow = false
     }
   },
   components: {
     QuestCmp,
     CountDown,
-    SignUp
+    SignUp,
+    LogIn
     }
 }
 </script>
