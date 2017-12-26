@@ -31,7 +31,9 @@
     </section>
     <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
     <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>    
-    <count-down :category="quests[currQuestIdx].category" v-if="countDown"></count-down>
+    <transition enter-active-class="animated flipInX">
+      <count-down :category="quests[currQuestIdx].category" v-if="countDown"></count-down>
+    </transition>
     <transition
       leave-active-class="animated slideOutRight">
       <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" @lastQuest="endGame" v-if="questReady" ></quest-cmp>
