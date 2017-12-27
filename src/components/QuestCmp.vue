@@ -4,7 +4,8 @@
       <div class="answer-wrapper">
         <button v-for="(answer, i) in answers" @click="answerChosen(answer)"
         v-html="answer" :key="i"
-        :class="{ 'correct animated rubberBand': answer === quest.correct_answer && userAnswer === answer,
+        :class="{ 'correct': answer === quest.correct_answer && userAnswer,
+                  'animated rubberBand': answer === quest.correct_answer && userAnswer === answer,
                   'incorrect animated shake': answer !== quest.correct_answer && userAnswer === answer,
                   'animated flipInX': !userAnswer }"
         class="answer"></button>
