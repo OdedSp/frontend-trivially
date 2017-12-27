@@ -51,12 +51,14 @@
       leave-active-class="animated slideOutRight">
       <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" @lastQuest="endGame" v-if="questReady" ></quest-cmp>
     </transition>
+    <results-page v-if="gameEnd" :report="gameReport"></results-page>
   </div>
 </template>
 
 <script>
 import QuestCmp from "./QuestCmp";
 import CountDown from "./CountDown";
+import ResultsPage from "./ResultsPage";
 import SignUp from "./SignUp";
 import LogIn from "./LogIn";
 
@@ -69,7 +71,9 @@ export default {
       questReady: false,
       signUpShow: false,
       loginShow: false,
+      gameEnd: false,
       quests: this.$store.state.triviaModule.questions,
+      gameReport: [],
       currQuestIdx: 0,
       timeLeft: 10
     };
@@ -92,7 +96,12 @@ export default {
         this.signUpShow = false;
       }
     },
-    questAnswered(result, time) {
+    questAnswered(result, time, answer) {
+      this.gameReport.push({
+        quest: this.quests[this.currQuestIdx],
+        chosenAnswer: answer,
+        time: time
+        })
       console.log(result, time);
       if (this.currQuestIdx !== this.quests.length - 1) {
         this.reviewAnswer();
@@ -130,8 +139,9 @@ export default {
     endGame() {
       setTimeout(() => {
         this.questReady = false;
-        this.isGameOn = false;
+        // this.isGameOn = false;
         this.currQuestIdx = 0;
+        this.gameEnd = true
       }, 1200);
     },
     createUser(userObj) {
@@ -152,6 +162,7 @@ export default {
   components: {
     QuestCmp,
     CountDown,
+    ResultsPage,
     SignUp,
     LogIn
   }

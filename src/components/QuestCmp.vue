@@ -17,7 +17,7 @@
 import EventBus, { RIGHT_ANSWER } from '../services/BusService'
 
 export default {
-  name: "QuestScreen",
+  name: "QuestCmp",
   data() {
       return {
         startTime: null,
@@ -36,9 +36,9 @@ export default {
         this.userAnswer = answer
         if (answer === this.quest.correct_answer) {
             EventBus.$emit(RIGHT_ANSWER)
-            this.$emit('answerChosen', true, this.answerTime())
+            this.$emit('answerChosen', true, this.answerTime(), answer)
         } else {
-            this.$emit('answerChosen', false, this.answerTime())
+            this.$emit('answerChosen', false, this.answerTime(), answer)
         }
     },
     shuffleAnswers() {
