@@ -1,34 +1,47 @@
 <template>
   <div>
+    <transition enter-active-class="animated slideInDown">
+      <nav v-if="isGameOn" class="navbar is-primary navbar-my-style" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="#">
+            <img src="../imgs/logo-small.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+          </a>
+        </div>
+      </nav>
+    </transition>
     <div v-if="!currUser" class="buttons">
       <button class="button is-info" @click="openLogin">Log In</button>
       <button class="button is-info" @click="openSignUp">Sign Up</button>
     </div>
-    <div v-else class="score">
+    <div v-else class="status-bar">
       <div class="user">
         <p>{{currUser.name}}</p>
         <p v-if="isGameOn">pnts</p>
       </div>
       <div v-if="isGameOn" class="opponent">
         <p>opponent name</p>
+        <!-- <p>{{timeLeft}}</p> -->
         <p>pnts</p>
       </div>
     </div>
-    <section class="game-start" v-if="!isGameOn">
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <div class="container">
-            <h1 class="title">
-              trivial travesty!
-            </h1>
-            <h2 class="subtitle">
-              A titillating trivia tournament that'll turn timid twits to talented thinkers!
-            </h2>
+    <transition leave-active-class="animated zoomOut">
+      <section class="game-start" v-if="!isGameOn">
+        <section class="hero is-primary">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title">
+                trivial travesty!
+              </h1>
+              <h2 class="subtitle">
+                A titillating trivia tournament that'll turn timid twits to talented thinkers!
+              </h2>
+            </div>
           </div>
-        </div>
+        </section>
+        <button class="button is-success play-button" @click="startGame">Play</button>
       </section>
-      <button class="button is-success play-button" @click="startGame">Play</button>
-    </section>
+    </transition>
+
     <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
     <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>    
     <transition enter-active-class="animated flipInX">
@@ -57,7 +70,8 @@ export default {
       signUpShow: false,
       loginShow: false,
       quests: this.$store.state.triviaModule.questions,
-      currQuestIdx: 0
+      currQuestIdx: 0,
+      timeLeft: 10
     };
   },
   computed: {
@@ -101,6 +115,9 @@ export default {
       setTimeout(() => {
         this.countDown = false;
         this.questReady = true;
+        // setInterval(()=>{
+
+        // }, 1000)
       }, 2000);
     },
     reviewAnswer() {
@@ -142,7 +159,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 h1 {
   font-weight: bold;
   text-transform: uppercase;
@@ -159,7 +176,14 @@ a {
   color: #42b983;
 }
 .play-button{
-  margin: 15px
+  margin: 15px;
+}
+.navbar-my-style {
+  margin-bottom: 10px;
+  img {
+    width: auto;
+    height: auto;
+  }
 }
 
 </style>

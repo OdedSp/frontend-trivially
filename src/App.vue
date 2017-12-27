@@ -37,7 +37,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: whitesmoke;
-  margin-top: 60px;
 }
 
 .pyro {
