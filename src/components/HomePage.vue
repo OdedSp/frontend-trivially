@@ -45,11 +45,11 @@
     <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
     <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>    
     <transition enter-active-class="animated flipInX">
-      <count-down :category="quests[currQuestIdx].category" v-if="countDown"></count-down>
+      <count-down :category="quest.category" v-if="countDown"></count-down>
     </transition>
     <transition
       leave-active-class="animated slideOutRight">
-      <quest-cmp :quest="quests[currQuestIdx]" @answerChosen="questAnswered" @lastQuest="endGame" v-if="questReady" ></quest-cmp>
+      <quest-cmp :quest="quest" @answerChosen="questAnswered" @lastQuest="endGame" v-if="questReady" ></quest-cmp>
     </transition>
   </div>
 </template>
@@ -69,7 +69,7 @@ export default {
       questReady: false,
       signUpShow: false,
       loginShow: false,
-      quests: this.$store.state.triviaModule.questions,
+      quest: null,
       currQuestIdx: 0,
       timeLeft: 10
     };
@@ -102,14 +102,13 @@ export default {
       }
     },
     startGame() {
+      this.$socket.emit('joinGameRoom')
+
       this.loginShow = false;
       this.signUpShow = false;
       if (!this.currUser) {
         this.createGuest()
       }
-      this.isGameOn = true;
-      this.countDown = true;
-      this.getReady();
     },
     getReady() {
       setTimeout(() => {
@@ -147,6 +146,14 @@ export default {
         name: 'guest'
       }
       this.createUser(guest)
+    }
+  },
+  sockets: {
+    nextRound(quest){
+      this.quest = quest
+      this.isGameOn = true;
+      this.countDown = true;
+      this.getReady();
     }
   },
   components: {

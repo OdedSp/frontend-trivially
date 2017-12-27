@@ -3,18 +3,28 @@ import TriviaService from '../services/TriviaService'
 export const SET_GAME_ON = 'trivia/setGameOn'
 
 const state = {
+    currQuest: null,
+    userScore: 0,
+    oppScore: 0,
+    isGameOn: false,
+    connect: false,
+    //להעביר להערה
     questions: TriviaService.getMock().slice(10,15),
-    isGameOn: false
 }
 
-const mutations = {}
+const mutations = {
+    SOCKET_CONNECT: (state,  status ) => {
+        console.log('socket connected');
+        
+        state.connect = true;
+    },
+}
 
 const actions = {
-    [SET_GAME_ON](state, boolean) {
-        if (boolean){
-            
-        }
-    }
+    // socket_joinGameRoom: (context) => {
+    //     context.dispatch('joinGameRoom')
+    //     // context.commit('waitingForOpponent')
+    // }
  }
 
 const getters = {
