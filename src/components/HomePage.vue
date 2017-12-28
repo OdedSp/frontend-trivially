@@ -25,7 +25,7 @@
       </div>
     </div>
     <transition leave-active-class="animated zoomOut">
-      <section class="game-start" v-if="!currRound.quest">
+      <section class="game-start" v-if="title">
         <section class="hero is-primary">
           <div class="hero-body">
             <div class="container">
@@ -53,13 +53,15 @@
                 @questAnswered="questAnswered"
                 v-if="showQuest && quest" ></quest-cmp>
     </transition>
-    <results-page v-if="gameEnd" :report="gameReport"></results-page>
+    <results-page v-if="gameEnd" @playAgain="startGame" @review="showReview"></results-page>
+    <report-page v-if="showReport" :report="gameReport"></report-page>
   </div>
 </template>
 
 <script>
 import QuestCmp from "./QuestCmp";
 import CountDown from "./CountDown";
+import ReportPage from "./ReportPage";
 import ResultsPage from "./ResultsPage";
 import SignUp from "./SignUp";
 import LogIn from "./LogIn";
@@ -71,10 +73,12 @@ export default {
   name: "HomePage",
   data() {
     return {
+      title: true,
       countDown: false,
       signUpShow: false,
       loginShow: false,
       showQuest: false,
+      showReport: false,
       gameReport: [],
       timeLeft: 10
     };
@@ -126,6 +130,8 @@ export default {
       this.$socket.emit('joinGameRoom')
       this.loginShow = false;
       this.signUpShow = false;
+      this.title = false
+      this.showReport = false
       if (!this.currUser) {
         this.createGuest()
       }
@@ -159,11 +165,16 @@ export default {
         name: 'guest'
       }
       this.createUser(guest)
+    },
+    showReview() {
+
+      this.showReport = true
     }
   },
   components: {
     QuestCmp,
     CountDown,
+    ReportPage,
     ResultsPage,
     SignUp,
     LogIn
