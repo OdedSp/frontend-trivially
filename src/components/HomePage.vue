@@ -61,6 +61,7 @@ import CountDown from "./CountDown";
 import ResultsPage from "./ResultsPage";
 import SignUp from "./SignUp";
 import LogIn from "./LogIn";
+import { ADD_REPORT } from "../modules/gameReport.module";
 
 export default {
   name: "HomePage",
@@ -97,11 +98,12 @@ export default {
       }
     },
     questAnswered(result, time, answer) {
-      this.gameReport.push({
+      var report = {
         quest: this.quests[this.currQuestIdx],
         chosenAnswer: answer,
         time: time
-        })
+        }
+      this.$store.dispatch({type: ADD_REPORT, report})
       console.log(result, time);
       if (this.currQuestIdx !== this.quests.length - 1) {
         this.reviewAnswer();

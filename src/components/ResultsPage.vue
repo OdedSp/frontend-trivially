@@ -1,7 +1,8 @@
 <template>
   <div>
-    <transition enter-active-class="animated slideInRight" leave-active-class="animated slideOutLeft">
-    <quest-result v-for="(quest, i) in report" :key="i" :questReport="report[i]" v-if="currQuestReportIdx===i">swipeRight:{{flipNext}}</quest-result>
+    <transition enter-active-class="animated fadeInRightBig" leave-active-class="animated fadeOutLeftBig">
+    <quest-result v-for="(quest, i) in report" :key="i" :questReport="report[i]" v-if="currQuestReportIdx===i">
+    </quest-result>
     </transition>
     <a class="pagination-previous" @click="flipBack">⪦</a>
     <a class="pagination-next" @click="flipNext">⪧</a>
@@ -15,23 +16,41 @@ export default {
   data() {
     return {
       currQuestReportIdx: 0,
-      direction: 'next'
+      direction: 'next',
     }
   },
-  props: ['report'],
+  computed: {
+    report() {
+      return this.$store.getters.report
+    }
+  },
   methods: {
     flipNext() {
-      if (this.currQuestReportIdx < this.report.length-1) {
-        this.currQuestReportIdx++
+      var p = this.currQuestReportIdx
+      if (p < this.report.length-1) {
+        this.currQuestReportIdx = -1
+        setTimeout(() => {
+          this.currQuestReportIdx = p+1
+        }, 1000);
       } else {
-        this.currQuestReportIdx = 0
+        this.currQuestReportIdx = -1
+        setTimeout(() => {
+          this.currQuestReportIdx = 0
+        }, 1000);
       }
     },
     flipBack() {
-      if (this.currQuestReportIdx > 0) {
-        this.currQuestReportIdx--
+      var p = this.currQuestReportIdx
+      if (p > 0) {
+        this.currQuestReportIdx = -1
+        setTimeout(() => {
+          this.currQuestReportIdx = p-1
+        }, 1000);
       } else {
-        this.currQuestReportIdx = this.report.length-1
+        this.currQuestReportIdx = -1
+        setTimeout(() => {
+          this.currQuestReportIdx = this.report.length-1
+        }, 1000);
       }
     },
   },
@@ -41,6 +60,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
+
+a {
+  
+}
 </style>
