@@ -12,13 +12,6 @@
             :rivalPickAndIncorrect="answered && currRound.rivalAnswerIdx === i && !currRound.rivalPts">
         </answer-cmp>
 
-        <!-- <button v-for="(answer, i) in currRound.quest.answers" @click="questAnswered(answer, i)"
-        v-html="answer" :key="i"
-        :class="{ 'correct animated rubberBand': currRound.answerIdx === i && currRound.userPts,
-                  'incorrect animated shake': currRound.answerIdx === i && !currRound.userPts,
-                  'animated flipInX': !quest }"
-        class="answer"></button> -->
-
       </div>
       <!-- currRound.answerIdx === i && currRound.userPts -->
   </div>
@@ -37,11 +30,11 @@ export default {
     };
   },
   props: ['quest', 'currRound'],
-  computed: {
-      answers() {
-          return this.shuffleAnswers();
-      }
-  },
+//   computed: {
+//       answers() {
+//           return this.shuffleAnswers();
+//       }
+//   },
 //   watch: {
 //     //   quest() {
 //     //       console.log('currRound changed:', this.currRound)
@@ -86,6 +79,7 @@ export default {
       answerCmp
   },
   created() {
+      console.log(this.quest)
       setTimeout(_=> {
               this.showAnswers = true
               this.startTime = Date.now()
