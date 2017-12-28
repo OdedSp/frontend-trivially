@@ -1,70 +1,100 @@
 <template>
   <div class="question-wrapper">
-      <h2 v-html="quest.question" class="question animated slideInDown"></h2>
+      <h2 v-html="currRound.quest.quest" class="question animated slideInDown"></h2>
       <div class="answer-wrapper">
-        <button v-for="(answer, i) in answers" @click="answerChosen(answer)"
+        <answer-cmp v-for="(answer, i) in currRound.quest.answers" :key="i"
+            @click.native="answerPicked(answer, i)"
+            v-if="showAnswers"
+            :answer="answer" :answered="answered"
+            :pickedAndCorrect="currRound.answerIdx === i && currRound.userPts" 
+            :pickedAndIncorrect="currRound.answerIdx === i && !currRound.userPts" 
+            :rivalPickAndCorrect="answered && currRound.rivalAnswerIdx === i && currRound.rivalPts" 
+            :rivalPickAndIncorrect="answered && currRound.rivalAnswerIdx === i && !currRound.rivalPts">
+        </answer-cmp>
+
+        <!-- <button v-for="(answer, i) in currRound.quest.answers" @click="questAnswered(answer, i)"
         v-html="answer" :key="i"
-        :class="{ 'correct': answer === quest.correct_answer && userAnswer,
-                  'animated rubberBand': answer === quest.correct_answer && userAnswer === answer,
-                  'incorrect animated shake': answer !== quest.correct_answer && userAnswer === answer,
-                  'animated flipInX': !userAnswer }"
-        class="answer"></button>
+        :class="{ 'correct animated rubberBand': currRound.answerIdx === i && currRound.userPts,
+                  'incorrect animated shake': currRound.answerIdx === i && !currRound.userPts,
+                  'animated flipInX': !quest }"
+        class="answer"></button> -->
+
       </div>
+      <!-- currRound.answerIdx === i && currRound.userPts -->
   </div>
 </template>
 
 <script>
-import EventBus, { RIGHT_ANSWER } from '../services/BusService'
+import answerCmp from './answerCmp'
 
 export default {
-  name: "QuestScreen",
+//   name: "QuestScreen",
   data() {
       return {
+        showAnswers: false,
         startTime: null,
-        userAnswer: null
+        answered: false
     };
   },
-  props: ["quest"],
+  props: ['quest', 'currRound'],
   computed: {
       answers() {
           return this.shuffleAnswers();
       }
   },
+//   watch: {
+//     //   quest() {
+//     //       console.log('currRound changed:', this.currRound)
+//     //     //   this.answered = false
+//     //       this.showAnswers = false
+//     //       setTimeout(_=> {
+//     //           this.showAnswers = true
+//     //           this.startTime = Date.now()
+//     //       }, 500)
+//     //   }
+//   },
   methods: {
-      answerChosen(answer) {
-        if (this.userAnswer) return
-        this.userAnswer = answer
-        if (answer === this.quest.correct_answer) {
-            EventBus.$emit(RIGHT_ANSWER)
-            this.$emit('answerChosen', true, this.answerTime())
-        } else {
-            this.$emit('answerChosen', false, this.answerTime())
-        }
+      answerPicked(answer, answerIdx) {
+        if (this.answered) return
+        this.answered = true
+        this.$emit('questAnswered', { answer, answerIdx }, this.answerTime())
+        // if (answer === this.quest.correct_answer) {
+        //     EventBus.$emit(RIGHT_ANSWER)
+        //     this.$emit('answerChosen', true, this.answerTime())
+        // } else {
+        //     this.$emit('answerChosen', false, this.answerTime())
+        // }
     },
-    shuffleAnswers() {
-      var answers = [];
-      for (let i = 0; i < this.quest.incorrect_answers.length; i++) {
-        answers.push(this.quest.incorrect_answers[i]);
-      }
-      answers.push(this.quest.correct_answer);
+    // shuffleAnswers() {
+    //   var answers = [];
+    //   for (let i = 0; i < this.quest.incorrect_answers.length; i++) {
+    //     answers.push(this.quest.incorrect_answers[i]);
+    //   }
+    //   answers.push(this.quest.correct_answer);
       
-      for (let i = answers.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [answers[i], answers[j]] = [answers[j], answers[i]];
-      }
-      return answers
-    },
+    //   for (let i = answers.length - 1; i > 0; i--) {
+    //     let j = Math.floor(Math.random() * (i + 1));
+    //     [answers[i], answers[j]] = [answers[j], answers[i]];
+    //   }
+    //   return answers
+    // },
     answerTime() {
         return Math.floor((Date.now() - this.startTime) / 1000)
     }
   },
+  components: {
+      answerCmp
+  },
   created() {
-      this.startTime = Date.now()
+      setTimeout(_=> {
+              this.showAnswers = true
+              this.startTime = Date.now()
+      }, 500)
   }
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 
 .question-wrapper {
     width: 95vw;
@@ -81,6 +111,7 @@ export default {
     width: 85%;
     .answer {
         // width: 100%;
+        position: relative;
         z-index: 1;
         outline: none;
         border-style: none;
@@ -94,6 +125,28 @@ export default {
         }
         &.incorrect {
             background: red
+        }
+        &.userPick::before {
+            position: absolute;
+            content: '';
+            height: 100%;
+            width: 10px;
+            left: 0;
+            top: 0;
+            border-right: 3px solid dodgerblue;
+            border-left: 3px solid dodgerblue;
+            background-color: #00002e;
+        }
+        &.rivalPick::after {
+            position: absolute;
+            content: '';
+            height: 100%;
+            width: 10px;
+            right: 0;
+            top: 0;
+            border-right: 3px solid gold;
+            border-left: 3px solid gold;
+            background-color: #00002e;
         }
     }
 }

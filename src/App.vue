@@ -47,4 +47,8 @@ export default {
   //   z-index: -1;
   // } 
 }
+
+button {
+  cursor: pointer;
+}
 </style>

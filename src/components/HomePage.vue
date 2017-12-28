@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition enter-active-class="animated slideInDown">
-      <nav v-if="isGameOn" class="navbar is-primary navbar-my-style" role="navigation" aria-label="main navigation">
+      <nav v-if="currRound.quest" class="navbar is-primary navbar-my-style" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <a class="navbar-item" href="#">
             <img src="../imgs/logo-small.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
@@ -16,16 +16,16 @@
     <div v-else class="status-bar">
       <div class="user">
         <p>{{currUser.name}}</p>
-        <p v-if="isGameOn">pnts</p>
+        <p v-if="currRound.quest">pnts</p>
       </div>
-      <div v-if="isGameOn" class="opponent">
+      <div v-if="currRound.quest" class="opponent">
         <p>opponent name</p>
         <!-- <p>{{timeLeft}}</p> -->
         <p>pnts</p>
       </div>
     </div>
     <transition leave-active-class="animated zoomOut">
-      <section class="game-start" v-if="!isGameOn">
+      <section class="game-start" v-if="!currRound.quest">
         <section class="hero is-primary">
           <div class="hero-body">
             <div class="container">
@@ -45,38 +45,55 @@
     <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
     <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>    
     <transition enter-active-class="animated flipInX">
-      <count-down :category="quest.category" v-if="countDown"></count-down>
+      <count-down :category="currRound.quest.category" v-if="countDown"></count-down>
     </transition>
     <transition
       leave-active-class="animated slideOutRight">
-      <quest-cmp :quest="quest" @answerChosen="questAnswered" @lastQuest="endGame" v-if="questReady" ></quest-cmp>
+      <quest-cmp :currRound="currRound" :quest="quest"
+                @questAnswered="questAnswered" @lastQuest="endGame"
+                v-if="showQuest && quest" ></quest-cmp>
     </transition>
   </div>
 </template>
 
 <script>
-import QuestCmp from "./QuestCmp";
-import CountDown from "./CountDown";
-import SignUp from "./SignUp";
-import LogIn from "./LogIn";
+import QuestCmp from './QuestCmp';
+import CountDown from './CountDown';
+import SignUp from './SignUp';
+import LogIn from './LogIn';
+
+import { SET_SOCKET } from '../store'
 
 export default {
   name: "HomePage",
   data() {
     return {
-      isGameOn: false,
+      // isGameOn: false,
       countDown: false,
-      questReady: false,
+      // questReady: false,
       signUpShow: false,
       loginShow: false,
-      quest: null,
-      currQuestIdx: 0,
+      showQuest: false,
+      // quest: null,
+      // currQuestIdx: 0,
       timeLeft: 10
     };
   },
   computed: {
     currUser() {
       return this.$store.getters.currUser
+    },
+    currRound() {
+      return this.$store.getters.currRound
+    },
+    quest() {
+      return this.$store.getters.quest
+    }
+  },
+  watch: {
+    quest() {
+      this.showQuest = false
+      setTimeout(_=> this.showQuest = true, 1000)
     }
   },
   methods: {
@@ -92,18 +109,18 @@ export default {
         this.signUpShow = false;
       }
     },
-    questAnswered(result, time) {
-      console.log(result, time);
-      if (this.currQuestIdx !== this.quests.length - 1) {
-        this.reviewAnswer();
-        this.getReady();
-      } else {
-        this.endGame();
-      }
+    questAnswered(answer, time) {
+      console.log(answer, time);
+      this.$socket.emit('playerAnswer', answer) // TODO: add time
+      // if (this.currQuestIdx !== this.quests.length - 1) {
+      //   this.reviewAnswer();
+      //   this.getReady();
+      // } else {
+      //   this.endGame();
+      // }
     },
     startGame() {
       this.$socket.emit('joinGameRoom')
-
       this.loginShow = false;
       this.signUpShow = false;
       if (!this.currUser) {
@@ -113,7 +130,7 @@ export default {
     getReady() {
       setTimeout(() => {
         this.countDown = false;
-        this.questReady = true;
+        // this.questReady = true;
         // setInterval(()=>{
 
         // }, 1000)
@@ -122,15 +139,15 @@ export default {
     reviewAnswer() {
       setTimeout(() => {
         this.countDown = true;
-        this.questReady = false;
+        // this.questReady = false;
         this.currQuestIdx++;
       }, 1200);
     },
     endGame() {
       setTimeout(() => {
-        this.questReady = false;
-        this.isGameOn = false;
-        this.currQuestIdx = 0;
+        // this.questReady = false;
+        // this.isGameOn = false;
+        // this.currQuestIdx = 0;
       }, 1200);
     },
     createUser(userObj) {
@@ -148,14 +165,14 @@ export default {
       this.createUser(guest)
     }
   },
-  sockets: {
-    nextRound(quest){
-      this.quest = quest
-      this.isGameOn = true;
-      this.countDown = true;
-      this.getReady();
-    }
-  },
+  // sockets: {
+  //   // nextRound(quest){
+  //   //   // this.quest = quest
+  //   //   this.isGameOn = true;
+  //   //   this.countDown = true;
+  //   //   this.getReady();
+  //   // }
+  // },
   components: {
     QuestCmp,
     CountDown,
