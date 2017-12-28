@@ -50,7 +50,7 @@
     <transition
       leave-active-class="animated slideOutRight">
       <quest-cmp :currRound="currRound" :quest="quest"
-                @questAnswered="questAnswered" @lastQuest="endGame"
+                @questAnswered="questAnswered"
                 v-if="showQuest && quest" ></quest-cmp>
     </transition>
     <results-page v-if="gameEnd" :report="gameReport"></results-page>
@@ -71,15 +71,11 @@ export default {
   name: "HomePage",
   data() {
     return {
-      // isGameOn: false,
       countDown: false,
-      // questReady: false,
       signUpShow: false,
       loginShow: false,
       showQuest: false,
       gameReport: [],
-      // quest: null,
-      // currQuestIdx: 0,
       timeLeft: 10
     };
   },
@@ -92,6 +88,9 @@ export default {
     },
     quest() {
       return this.$store.getters.quest
+    },
+    gameEnd() {
+      return this.$store.getters.gameFinished
     }
   },
   watch: {
@@ -114,20 +113,14 @@ export default {
       }
     },
     questAnswered(answer, time) {
-      // var report = {
-      //   quest: this.quests[this.currQuestIdx],
-      //   chosenAnswer: answer,
-      //   time: time
-      //   }
+      var report = {
+        round: this.currRound,
+        chosenAnswer: answer,
+        time: time
+        }
       // this.$store.dispatch({type: ADD_REPORT, report})
       console.log(answer, time);
       this.$socket.emit('playerAnswer', answer) // TODO: add time
-      // if (this.currQuestIdx !== this.quests.length - 1) {
-      //   this.reviewAnswer();
-      //   this.getReady();
-      // } else {
-      //   this.endGame();
-      // }
     },
     startGame() {
       this.$socket.emit('joinGameRoom')
@@ -153,13 +146,6 @@ export default {
         this.currQuestIdx++;
       }, 1200);
     },
-    endGame() {
-      setTimeout(() => {
-        // this.questReady = false;
-        // this.isGameOn = false;
-        // this.currQuestIdx = 0;
-      }, 1200);
-    },
     createUser(userObj) {
       this.$store.dispatch("addUser", userObj);
       this.signUpShow = false;
@@ -175,14 +161,6 @@ export default {
       this.createUser(guest)
     }
   },
-  // sockets: {
-  //   // nextRound(quest){
-  //   //   // this.quest = quest
-  //   //   this.isGameOn = true;
-  //   //   this.countDown = true;
-  //   //   this.getReady();
-  //   // }
-  // },
   components: {
     QuestCmp,
     CountDown,

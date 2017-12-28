@@ -9,6 +9,7 @@ const state = {
     answerIdx: null,
     rivalAnswerIdx: null,
     rivalPts: 0,
+    gameFinished: false,
 
     userTotalPts: 0,
     rivalTotalPts: 0
@@ -26,6 +27,7 @@ const mutations = {
 
     },
     SOCKET_NEXTROUND(state, quest) {
+        state.gameFinished = false
         state.quest = quest
         state.userPts = 0
         state.answerIdx = null
@@ -45,12 +47,11 @@ const mutations = {
         state.rivalTotalPts += points
     },
     SOCKET_GAMECOMPLETED(state) {
+        state.gameFinished = true
         state.quest = null
     }
 }
-const actions = {
-
-}
+const actions = {}
 
 const getters = {
     currRound(state) {
@@ -64,6 +65,9 @@ const getters = {
     },
     quest(state) {
         return state.quest
+    },
+    gameFinished() {
+        return state.gameFinished
     }
 }
 

@@ -1,42 +1,54 @@
 <template>
   <div class="question-wrapper">
-      <h2 v-html="questReport.quest.question" class="question"></h2>
+      <h2 v-html="questReport.quest.quest" class="question"></h2>
       <div class="answer-wrapper">
-        <button v-for="(answer, i) in answers"
+        <!-- <button v-for="(answer, i) in questReport.round.quest.answers"
         v-html="answer" :key="i"
-        :class="{ 'correct': answer === questReport.quest.correct_answer,
-                  'animated rubberBand': answer === questReport.quest.correct_answer && questReport.chosenAnswer === answer,
-                  'incorrect animated shake': answer !== questReport.quest.correct_answer && questReport.chosenAnswer === answer
-                  }"
+          :class="{ 'correct': answer === 'todo: change',
+                      'animated rubberBand': answer === questReport.quest.correct_answer && questReport.chosenAnswer === answer,
+                      'incorrect animated shake': answer !== questReport.quest.correct_answer && questReport.chosenAnswer === answer
+                      }"
         class="answer">
-        </button>
+        </button> -->
+        <answer-cmp v-for="(answer, i) in questReport.quest.answers" :key="i"
+            :answer="answer"
+            :pickedAndCorrect="questReport.answerIdx === i && questReport.userPts" 
+            :pickedAndIncorrect="questReport.answerIdx === i && !questReport.userPts" 
+            :rivalPickAndCorrect="questReport && questReport.rivalAnswerIdx === i && questReport.rivalPts" 
+            :rivalPickAndIncorrect="questReport.rivalAnswerIdx === i && !questReport.rivalPts">
+        </answer-cmp>
         {{questReport.time}}s
       </div>
   </div>
 </template>
 
 <script>
+import answerCmp from './answerCmp'
+
 export default {
   props: ['questReport'],
   computed: {
-    answers() {
-      return this.shuffleAnswers();
-    },
+    // answers() {
+    //   return this.shuffleAnswers();
+    // },
   },
   methods: {
-    shuffleAnswers() {
-      var answers = [];
-      for (let i = 0; i < this.questReport.quest.incorrect_answers.length; i++) {
-        answers.push(this.questReport.quest.incorrect_answers[i]);
-      }
-      answers.push(this.questReport.quest.correct_answer);
+    // shuffleAnswers() {
+    //   var answers = [];
+    //   for (let i = 0; i < this.questReport.quest.incorrect_answers.length; i++) {
+    //     answers.push(this.questReport.quest.incorrect_answers[i]);
+    //   }
+    //   answers.push(this.questReport.quest.correct_answer);
 
-      for (let i = answers.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [answers[i], answers[j]] = [answers[j], answers[i]];
-      }
-      return answers
-    }
+    //   for (let i = answers.length - 1; i > 0; i--) {
+    //     let j = Math.floor(Math.random() * (i + 1));
+    //     [answers[i], answers[j]] = [answers[j], answers[i]];
+    //   }
+    //   return answers
+    // }
+  },
+  components: {
+    answerCmp
   }
 };
 </script>
