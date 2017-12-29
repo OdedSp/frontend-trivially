@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition enter-active-class="animated slideInDown">
-      <nav v-if="currRound.quest" class="navbar is-primary navbar-my-style" role="navigation" aria-label="main navigation">
+      <nav v-if="quest" class="navbar is-primary navbar-my-style" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <a class="navbar-item" href="#">
             <img src="../imgs/logo-small.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
@@ -16,16 +16,16 @@
     <div v-else class="status-bar">
       <div class="user">
         <p>{{currUser.name}}</p>
-        <p v-if="currRound.quest">pnts</p>
+        <p v-if="quest">pnts</p>
       </div>
-      <div v-if="currRound.quest" class="opponent">
+      <div v-if="quest" class="opponent">
         <p>opponent name</p>
         <!-- <p>{{timeLeft}}</p> -->
         <p>pnts</p>
       </div>
     </div>
     <transition leave-active-class="animated zoomOut">
-      <section class="game-start" v-if="!currRound.quest">
+      <section class="game-start" v-if="!quest">
         <section class="hero is-primary">
           <div class="hero-body">
             <div class="container">
@@ -45,12 +45,12 @@
     <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
     <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>    
     <transition enter-active-class="animated flipInX">
-      <count-down :category="currRound.quest.category" v-if="countDown"></count-down>
+      <count-down :category="quest.category" v-if="countDown"></count-down>
     </transition>
     <transition
       leave-active-class="animated slideOutRight">
       <quest-cmp :currRound="currRound" :quest="quest"
-                @questAnswered="questAnswered" @lastQuest="endGame"
+                @questAnswered="questAnswered"
                 v-if="showQuest && quest" ></quest-cmp>
     </transition>
   </div>
@@ -62,33 +62,26 @@ import CountDown from './CountDown';
 import SignUp from './SignUp';
 import LogIn from './LogIn';
 
-import { SET_SOCKET } from '../store'
+import { mapGetters } from 'vuex'
+import { SET_ANSWER_ID } from '../modules/trivia.module'
 
 export default {
   name: "HomePage",
   data() {
     return {
-      // isGameOn: false,
       countDown: false,
-      // questReady: false,
       signUpShow: false,
       loginShow: false,
       showQuest: false,
-      // quest: null,
-      // currQuestIdx: 0,
-      timeLeft: 10
+      timeLeft: 10 // curently not in use
     };
   },
   computed: {
-    currUser() {
-      return this.$store.getters.currUser
-    },
-    currRound() {
-      return this.$store.getters.currRound
-    },
-    quest() {
-      return this.$store.getters.quest
-    }
+    ...mapGetters([
+      'currUser',
+      'currRound',
+      'quest'
+    ])
   },
   watch: {
     quest() {
@@ -109,15 +102,10 @@ export default {
         this.signUpShow = false;
       }
     },
-    questAnswered(answer, time) {
-      console.log(answer, time);
-      this.$socket.emit('playerAnswer', answer) // TODO: add time
-      // if (this.currQuestIdx !== this.quests.length - 1) {
-      //   this.reviewAnswer();
-      //   this.getReady();
-      // } else {
-      //   this.endGame();
-      // }
+    questAnswered(answerId, answerTime) {
+      console.log({ answerId, answerTime });
+      this.$store.commit({ type: SET_ANSWER_ID, answerId })
+      this.$socket.emit('playerAnswer', { answerId, answerTime }) // TODO: add time
     },
     startGame() {
       this.$socket.emit('joinGameRoom')
@@ -183,7 +171,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 h1 {
   font-weight: bold;
   text-transform: uppercase;

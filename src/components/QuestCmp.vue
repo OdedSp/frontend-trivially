@@ -1,15 +1,15 @@
 <template>
   <div class="question-wrapper">
-      <h2 v-html="currRound.quest.quest" class="question animated slideInDown"></h2>
+      <h2 v-html="quest.txt" class="question animated slideInDown"></h2>
       <div class="answer-wrapper">
-        <answer-cmp v-for="(answer, i) in currRound.quest.answers" :key="i"
-            @click.native="answerPicked(answer, i)"
+        <answer-cmp v-for="answer in quest.answers" :key="answer.id"
+            @click.native="answerPicked(answer.id)"
             v-if="showAnswers"
-            :answer="answer" :answered="answered"
-            :pickedAndCorrect="currRound.answerIdx === i && currRound.userPts" 
-            :pickedAndIncorrect="currRound.answerIdx === i && !currRound.userPts" 
-            :rivalPickAndCorrect="answered && currRound.rivalAnswerIdx === i && currRound.rivalPts" 
-            :rivalPickAndIncorrect="answered && currRound.rivalAnswerIdx === i && !currRound.rivalPts">
+            :answer="answer.txt" :answered="answered"
+            :pickedAndCorrect="currRound.answerId === answer.id && currRound.userPts" 
+            :pickedAndIncorrect="currRound.answerId === answer.id && !currRound.userPts" 
+            :rivalPickAndCorrect="answered && currRound.rivalAnswerId === answer.id && currRound.rivalPts" 
+            :rivalPickAndIncorrect="answered && currRound.rivalAnswerId === answer.id && !currRound.rivalPts">
         </answer-cmp>
 
       </div>
@@ -47,10 +47,10 @@ export default {
 //     //   }
 //   },
   methods: {
-      answerPicked(answer, answerIdx) {
+      answerPicked(answerId) {
         if (this.answered) return
         this.answered = true
-        this.$emit('questAnswered', { answer, answerIdx }, this.answerTime())
+        this.$emit('questAnswered', answerId, this.answerTime())
         // if (answer === this.quest.correct_answer) {
         //     EventBus.$emit(RIGHT_ANSWER)
         //     this.$emit('answerChosen', true, this.answerTime())
@@ -72,7 +72,7 @@ export default {
     //   return answers
     // },
     answerTime() {
-        return Math.floor((Date.now() - this.startTime) / 1000)
+        return Date.now() - this.startTime
     }
   },
   components: {
@@ -84,6 +84,11 @@ export default {
               this.showAnswers = true
               this.startTime = Date.now()
       }, 500)
+  },
+  watch: {
+      currRound() {
+          console.log({currRound: this.currRound})
+      }
   }
 };
 </script>
