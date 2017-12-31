@@ -50,17 +50,23 @@
                 @questAnswered="questAnswered"
                 v-if="showQuest && quest" ></quest-cmp>
     </transition> -->
+    <results-page v-if="true" @playAgain="startGame" @review="showReview"></results-page>
+    <report-page v-if="showReport"></report-page>
   </div>
 </template>
 
 <script>
 import SignUp from './SignUp';
 import LogIn from './LogIn';
+import ReportPage from "./ReportPage"; // use router to view instead
+import ResultsPage from "./ResultsPage"; // use router to view instead
 // import QuestCmp from './QuestCmp';
 // import CountDown from './CountDown';
 
 import { mapGetters } from 'vuex'
 import { SET_ANSWER_ID } from '../modules/trivia.module'
+import { ADD_REPORT } from "../modules/gameReport.module"; // temporarily here
+
 
 export default {
   name: "HomePage",
@@ -69,7 +75,8 @@ export default {
       signUpShow: false,
       loginShow: false,
       showQuest: false,
-      gameIsStarting: false
+      gameIsStarting: false,
+      showReport: false // temp
     };
   },
   computed: {
@@ -120,45 +127,14 @@ export default {
       }
       setTimeout(_=> this.$router.push('game'), 500)
     },
-    // questAnswered(answerId, answerTime) {
-    //   console.log({ answerId, answerTime });
-    //   this.$store.commit({ type: SET_ANSWER_ID, answerId })
-    //   this.$socket.emit('playerAnswer', { answerId, answerTime }) // TODO: add time
-    // },
-    // startGame() {
-    //   this.$socket.emit('joinGameRoom')
-    //   this.loginShow = false;
-    //   this.signUpShow = false;
-    //   if (!this.currUser) {
-    //     this.createGuest()
-    //   }
-    // },
-    // getReady() {
-    //   setTimeout(() => {
-    //     this.countDown = false;
-    //     // this.questReady = true;
-    //     // setInterval(()=>{
+    showReview() { //temp
 
-    //     // }, 1000)
-    //   }, 2000);
-    // },
-    // reviewAnswer() {
-    //   setTimeout(() => {
-    //     this.countDown = true;
-    //     // this.questReady = false;
-    //     this.currQuestIdx++;
-    //   }, 1200);
-    // }
+      this.showReport = true
+    }
   },
-  // sockets: {
-  //   // nextRound(quest){
-  //   //   // this.quest = quest
-  //   //   this.isGameOn = true;
-  //   //   this.countDown = true;
-  //   //   this.getReady();
-  //   // }
-  // },
   components: {
+    ReportPage,
+    ResultsPage,
     SignUp,
     LogIn
     // QuestCmp,

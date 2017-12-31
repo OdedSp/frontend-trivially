@@ -4,7 +4,6 @@ import EventBus, { RIGHT_ANSWER } from '../services/BusService'
 export const SET_ANSWER_ID = 'trivia/setAnswerId'
 
 const state = {
-
     quest: null,
     userPts: 0,
     answerId: null,
@@ -44,6 +43,7 @@ const mutations = {
         // state.rivalAvatar = rival.avatar
     },
     SOCKET_NEXTROUND(state, quest) {
+        state.gameFinished = false
         state.quest = quest
         state.userPts = 0
         state.answerId = null
@@ -74,15 +74,14 @@ const mutations = {
         state.correctAnswerId = answerId
     },
     SOCKET_GAMECOMPLETED(state) {
+        state.gameFinished = true
         state.quest = null
     },
     [SET_ANSWER_ID](state, { answerId }) {
         state.answerId = answerId
     }
 }
-const actions = {
-
-}
+const actions = {}
 
 const getters = {
     currRound(state) {
