@@ -1,5 +1,6 @@
 import Router from 'vue-router'
 import HomePage from '@/components/HomePage'
+import TriviaGame from '@/components/TriviaGame'
 
 
 export default new Router({
@@ -8,6 +9,11 @@ export default new Router({
       path: '/',
       name: 'HomePage',
       component: HomePage
+    },
+    {
+      path: '/game',
+      name: 'game',
+      component: TriviaGame
     }
   ]
 })

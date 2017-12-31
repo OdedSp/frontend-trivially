@@ -1,6 +1,13 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition enter-active-class="animated slideInDown">
+      <nav-bar v-if="showNav" />
+    </transition>
+
+    <transition>
+      <router-view />
+    </transition>
+
     <div :class="{ pyro: showPyro }">
       <div class="before"></div>
       <div class="after"></div>
@@ -9,12 +16,15 @@
 </template>
 
 <script>
+import navBar from './components/NavBar'
+
 import EventBus, {RIGHT_ANSWER} from './services/BusService'
 
 export default {
   name: 'app',
   data() {
     return {
+      showNav: false,
       showPyro: false
     }
   },
@@ -24,7 +34,18 @@ export default {
       setTimeout(_=> this.showPyro = false, 2000)
     }
   },
+  watch: {
+     $route(to, from) {
+      console.log({to, from})
+      to.name === 'HomePage'
+      ? this.showNav = false : this.showNav = true
+    }
+  },
+  components: {
+    navBar
+  },
   created() {
+    if (this.$route.name !== 'HomePage') this.showNav = true
     EventBus.$on(RIGHT_ANSWER, this.turnOnPyro)
   }
 }
@@ -46,6 +67,14 @@ export default {
   // .before, .after {
   //   z-index: -1;
   // } 
+}
+
+.navbar-my-style {
+  margin-bottom: 10px;
+  img {
+    width: auto;
+    height: auto;
+  }
 }
 
 button {

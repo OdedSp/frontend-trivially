@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="countdown">
       {{category}}
       <h4>Get ready!</h4>
-      {{timeLeft}}
+      <h1>{{timeLeft}}</h1>
   </div>
 </template>
 
@@ -11,22 +11,31 @@ export default {
     props: ['category'],
     data() {
         return {
-            timeLeft: 4
-        }
-    },
-    computed: {
-        stopCount(){
-            if (timeLeft===0) {
-                clearInterval(startCount)
-            }
+            timeLeft: 3,
+            intervalId: null
         }
     },
     mounted() {
-        var startCount = setInterval(()=>this.timeLeft--, 500)
+        this.intervalId = setInterval(_=> {
+            this.timeLeft--
+            if (this.timeLeft === 1) {
+                clearInterval(this.intervalId)
+                setTimeout(_=> this.$emit('countedDown'), 1000)
+            }
+        }, 1000)
     }
 }
 </script>
 
-<style>
+<style lang="scss">
+
+.countdown {
+    h1 {
+        font-size: 350%;
+        font-weight: bolder;
+        text-align: center;
+        margin-top: 1em;
+    }
+}
 
 </style>

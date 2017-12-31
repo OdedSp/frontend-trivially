@@ -8,8 +8,8 @@
             :answer="answer.txt" :answered="answered"
             :pickedAndCorrect="currRound.answerId === answer.id && currRound.userPts" 
             :pickedAndIncorrect="currRound.answerId === answer.id && !currRound.userPts" 
-            :rivalPickAndCorrect="answered && currRound.rivalAnswerId === answer.id && currRound.rivalPts" 
-            :rivalPickAndIncorrect="answered && currRound.rivalAnswerId === answer.id && !currRound.rivalPts">
+            :rivalPickAndCorrect="currRound.rivalAnswerId === answer.id && currRound.rivalPts" 
+            :rivalPickAndIncorrect="currRound.rivalAnswerId === answer.id && !currRound.rivalPts">
         </answer-cmp>
 
       </div>

@@ -86,17 +86,39 @@ const actions = {
 
 const getters = {
     currRound(state) {
+        var rivalAnswerId = null
+        var rivalPts = null
+        if (state.answerId) {
+            rivalAnswerId = state.rivalAnswerId
+            rivalPts = state.rivalPts
+        }
         return {
-            // quest: state.quest,
             userPts: state.userPts,
             answerId: state.answerId,
-            rivalAnswerId: state.rivalAnswerId,
-            rivalPts: state.rivalPts,
+            rivalAnswerId,
+            rivalPts,
         }
     },
     quest(state) {
         return state.quest
+    },
+    totalPts(state) {
+        var rivalTotal = state.rivalTotalPts
+        if (!state.answerId) rivalTotal -= state.rivalPts
+        return {
+            userTotal: state.userTotalPts,
+            rivalTotal
+        }
     }
+    // userScore(state) {
+    //     return user.score
+    // },
+    // rival(state) {
+    //     return {
+    //         name: state.rivalName,
+    //         avatar: state.rivalAvatar
+    //     }
+    // }
 }
 
 
