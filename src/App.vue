@@ -36,7 +36,7 @@ export default {
   },
   watch: {
      $route(to, from) {
-      console.log({to, from})
+      // console.log({to, from})
       to.name === 'HomePage'
       ? this.showNav = false : this.showNav = true
     }

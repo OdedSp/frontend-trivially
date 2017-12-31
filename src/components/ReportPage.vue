@@ -24,6 +24,10 @@ export default {
       return this.$store.getters.report
     }
   },
+  created () {
+    console.log(this.report);
+    
+  },
   methods: {
     flipNext() {
       var p = this.currQuestReportIdx

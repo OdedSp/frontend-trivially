@@ -33,8 +33,6 @@ export default {
       this.$emit("closeComp");
     },
     sendUser() {
-      console.log("submitted");
-
       var userObj = {
         name: this.name,
         password: this.password

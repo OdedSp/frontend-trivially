@@ -43,9 +43,7 @@ export default {
     closeComp(){
       this.$emit('closeComp')
     },
-    sendUser(){
-      console.log('submitted');
-      
+    sendUser(){      
       var userObj = {
         name: this.name,
         mail: this.mail,

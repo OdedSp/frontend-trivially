@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     questAnswered(answerId, answerTime) {
-      console.log({ answerId, answerTime });
+      // console.log({ answerId, answerTime });
       this.$store.commit({ type: SET_ANSWER_ID, answerId })
       this.$socket.emit('playerAnswer', { answerId, answerTime })
     },

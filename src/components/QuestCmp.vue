@@ -36,15 +36,15 @@ export default {
 //       }
 //   },
 //   watch: {
-//     //   quest() {
-//     //       console.log('currRound changed:', this.currRound)
-//     //     //   this.answered = false
-//     //       this.showAnswers = false
-//     //       setTimeout(_=> {
-//     //           this.showAnswers = true
-//     //           this.startTime = Date.now()
-//     //       }, 500)
-//     //   }
+//       quest() {
+//           console.log('currRound changed:', this.currRound)
+//         //   this.answered = false
+//           this.showAnswers = false
+//           setTimeout(_=> {
+//               this.showAnswers = true
+//               this.startTime = Date.now()
+//           }, 500)
+//       }
 //   },
   methods: {
       answerPicked(answerId) {
@@ -79,16 +79,10 @@ export default {
       answerCmp
   },
   created() {
-      console.log(this.quest)
       setTimeout(_=> {
               this.showAnswers = true
               this.startTime = Date.now()
       }, 500)
-  },
-  watch: {
-      currRound() {
-          console.log({currRound: this.currRound})
-      }
   }
 };
 </script>

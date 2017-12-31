@@ -59,7 +59,7 @@ const mutations = {
     //     if (points) EventBus.$emit(RIGHT_ANSWER)
     // },
     SOCKET_ANSWERPROCESSED(state, points) {
-        console.log('entered answerProcced mutation')
+        // console.log('entered answerProcced mutation')
         state.userPts = points
         state.userTotalPts += points
         if (points) EventBus.$emit(RIGHT_ANSWER)
@@ -70,7 +70,7 @@ const mutations = {
         state.rivalTotalPts += points
     },
     SOCKET_ANSWERWAS(state, answerId) {
-        console.log('entered answerWas', {answerId})
+        // console.log('entered answerWas', {answerId})
         state.correctAnswerId = answerId
     },
     SOCKET_GAMECOMPLETED(state) {
