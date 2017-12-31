@@ -20,9 +20,9 @@ export default {
             this.timeLeft--
             if (this.timeLeft === 1) {
                 clearInterval(this.intervalId)
-                setTimeout(_=> this.$emit('countedDown'), 1000)
+                setTimeout(_=> this.$emit('countedDown'), 500)
             }
-        }, 1000)
+        }, 500)
     }
 }
 </script>
