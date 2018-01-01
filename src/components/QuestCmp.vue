@@ -9,7 +9,8 @@
             :pickedAndCorrect="currRound.answerId === answer.id && currRound.userPts" 
             :pickedAndIncorrect="currRound.answerId === answer.id && !currRound.userPts" 
             :rivalPickAndCorrect="currRound.rivalAnswerId === answer.id && currRound.rivalPts" 
-            :rivalPickAndIncorrect="currRound.rivalAnswerId === answer.id && !currRound.rivalPts">
+            :rivalPickAndIncorrect="currRound.rivalAnswerId === answer.id && !currRound.rivalPts"
+            :wasAnswer="correctId === answer.id">
         </answer-cmp>
 
       </div>
@@ -30,7 +31,7 @@ export default {
         // startTime: null,
     };
   },
-  props: ['quest', 'currRound'],
+  props: ['quest', 'currRound', 'correctId'],
   computed: {
       startTime() {
           return this.$store.getters.roundStartTime

@@ -53,7 +53,6 @@ import LogIn from './LogIn';
 // import ResultsPage from "./ResultsPage"; // use router to view instead
 
 import { mapGetters } from 'vuex'
-import { SET_ANSWER_ID } from '../modules/trivia.module'
 // import { ADD_REPORT } from "../modules/gameReport.module"; // temporarily here
 
 

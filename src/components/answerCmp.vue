@@ -12,7 +12,8 @@ export default {
         'pickedAndCorrect',
         'pickedAndIncorrect',
         'rivalPickAndCorrect',
-        'rivalPickAndIncorrect'
+        'rivalPickAndIncorrect',
+        'wasAnswer'
     ],
     computed: {
         answerClass() {
@@ -21,7 +22,8 @@ export default {
                 'correct userPick animated rubberBand': this.pickedAndCorrect,
                 'incorrect userPick animated shake': this.pickedAndIncorrect,
                 'correct rivalPick': this.rivalPickAndCorrect,
-                'incorrect rivalPick': this.rivalPickAndIncorrect
+                'incorrect rivalPick': this.rivalPickAndIncorrect,
+                'correct animated pulse': this.wasAnswer
             }
         }
     }

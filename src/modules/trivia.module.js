@@ -1,13 +1,16 @@
 import axios from 'axios'
 
 import TriviaService from '../services/TriviaService'
-import EventBus, { RIGHT_ANSWER } from '../services/BusService'
+import EventBus, { RIGHT_ANSWER, RIVAL_DISCONNECTED } from '../services/BusService'
 
 export const ROUND_START_TIME = 'trivia/setRoundStartTime'
-export const SET_ANSWER_ID = 'trivia/setAnswerId'
 export const GAME_COMPLETED = 'trivia/handleGameCompleted'
+export const RIVAL_LEFT = 'trivia/handleRivalLeft'
 
-const BASE_ROUTE = '//localhost:3003/data'
+var BASE_ROUTE = '//localhost:3003/data'
+if (process.env.NODE_ENV !== 'development') {
+    BASE_ROUTE = '/data';
+}
 
 const state = {
     roundReports: [],
@@ -25,19 +28,22 @@ const state = {
     rivalName: null,
     rivalAvatar: null,
 
-    gameStartTime: null
+    gameStartTime: null,
+
+    waitingForRival: false
 
 }
 const mutations = {
-    SOCKET_WAITINGFOROPPONENT(state) {
-        console.log('Waiting for opponent')
+    SOCKET_WAITINGFORRIVAL(state) {
+        state.waitingForRival = true
     },
     SOCKET_FIRSTROUND(state, { quest, rival, createdAt }) {
+        state.waitingForRival = false
         state.userTotalPts = 0
         state.rivalTotalPts = 0
         state.gameStartTime = createdAt
-        state.rivalName = rival.name // not in use at the moment
-        state.rivalAvatar = rival.avatar // not in use at the moment
+        // state.rivalName = rival.name // not in use at the moment
+        // state.rivalAvatar = rival.avatar // not in use at the moment
 
         resetRound(state, quest)
     },
@@ -45,9 +51,10 @@ const mutations = {
         pushRoundReport(state)
         resetRound(state, quest)
     },
-    SOCKET_ANSWERPROCESSED(state, points) {
+    SOCKET_ANSWERPROCESSED(state, { answerId, points }) {
         state.userPts = points
         state.userTotalPts += points
+        state.answerId = answerId
         if (points) EventBus.$emit(RIGHT_ANSWER)
     },
     SOCKET_RIVALANSWER(state, { answerId, points }) {
@@ -56,39 +63,49 @@ const mutations = {
         state.rivalTotalPts += points
     },
     SOCKET_ANSWERWAS(state, answerId) {
-        console.log('entered answerWas', {answerId})
+        console.log({correctAnswerId: answerId})
         state.correctAnswerId = answerId
     },
-    // SOCKET_GAMECOMPLETED(state) {
-    //     state.quest = null
-    // },
     [ROUND_START_TIME](state, { startTime }) {
         state.roundStartTime = startTime
     },
     [GAME_COMPLETED](state) {
         if (state.quest) pushRoundReport(state)
         state.quest = null
+        state.userTotalPts = 0
+        state.rivalTotalPts = 0
+        state.gameStartTime = null
     },
-    [SET_ANSWER_ID](state, { answerId }) {
-        state.answerId = answerId
+    [RIVAL_LEFT](state) {
+        state.rivalTotalPts = 0
+        state.rivalName = null
+        state.rivalAvatar = null
+        state.quest = null
     }
 }
 const actions = {
-    socket_gameCompleted({state, commit, getters}) {
+    socket_gameCompleted({ state, commit, getters }) {
+        var win = state.userTotalPts >= state.rivalTotalPts
+        var game_time = state.gameStartTime
         commit(GAME_COMPLETED)
         var user = getters.currUser
         if (!user || user.name.toLowerCase() === 'guest') return
         var statObj = {
             username: user.name,
             game_results: {
-                game_time: state.gameStartTime,
-                win: state.userTotalPts >= state.rivalTotalPts,
+                game_time,
+                win,
                 totalQuestions: state.roundReports.length,
                 correct_questions: state.roundReports.filter(({ userPts }) => !!userPts).length
             } 
         }
         axios.post(`${BASE_ROUTE}/statistic`, statObj)
         .catch(err => console.warn('An error occured while trying to update last game\'s user stats:', err))
+    },
+    socket_rivalLeft({ dispatch, commit }) {
+        EventBus.$emit(RIVAL_DISCONNECTED)
+        commit(RIVAL_LEFT)
+        dispatch('socket_gameCompleted')
     }
 }
 
@@ -110,6 +127,11 @@ const getters = {
     quest(state) {
         return state.quest
     },
+    correctAnswerId(state) {
+        if (state.answerId === state.correctAnswerId
+            || state.rivalAnswerId === state.correctAnswerId) return null
+        return state.correctAnswerId
+    },
     roundStartTime(state) {
         return state.roundStartTime
     },
@@ -120,6 +142,9 @@ const getters = {
             userTotal: state.userTotalPts,
             rivalTotal
         }
+    },
+    waitingForRival(state) {
+        return state.waitingForRival
     }
     // rival(state) {
     //     return {

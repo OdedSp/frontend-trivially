@@ -10,9 +10,14 @@ import VueSocketio from 'vue-socket.io';
 import router from './router'
 import store from './store.js'
 
+let serverUrl = '//localhost:3003';
+if (process.env.NODE_ENV !== 'development') {
+    serverUrl = '/';
+}
+
 
 Vue.use(VeeValidate);
-Vue.use(VueSocketio, 'http://localhost:3003', store);
+Vue.use(VueSocketio, serverUrl, store);
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
