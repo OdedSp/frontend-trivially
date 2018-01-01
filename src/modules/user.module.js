@@ -2,6 +2,7 @@ import UserService from '../services/UserService'
 
 const state = {
     currUser: null
+    // currUser: {name: 'ninabombina'} // for testing purposes
 }
 
 const mutations = {

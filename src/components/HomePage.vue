@@ -71,10 +71,7 @@ export default {
   computed: {
     ...mapGetters([
       'currUser'
-      // 'currRound',
-      // 'quest'
     ]),
-    // currUser() { return { name: 'Nina Bombina' } }
   },
   methods: {
     openSignUp() {

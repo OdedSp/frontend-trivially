@@ -20,7 +20,7 @@
 <script>
 import answerCmp from './answerCmp'
 
-import { SET_ROUND_START } from '../modules/trivia.module'
+import { ROUND_START_TIME } from '../modules/trivia.module'
 
 export default {
   data() {
@@ -73,7 +73,7 @@ export default {
       !this.startTime
       ? setTimeout(_=> {
               this.showAnswers = true
-              this.$store.commit({ type: SET_ROUND_START, startTime: Date.now() })
+              this.$store.commit({ type: ROUND_START_TIME, startTime: Date.now() })
       }, 500)
       : this.showAnswers = true
   },
