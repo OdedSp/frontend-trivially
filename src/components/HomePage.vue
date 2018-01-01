@@ -41,31 +41,20 @@
     <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
     <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>  
 
-    <!-- <transition enter-active-class="animated flipInX">
-      <count-down :category="quest.category" v-if="countDown"></count-down>
-    </transition>
-    <transition
-      leave-active-class="animated slideOutRight">
-      <quest-cmp :currRound="currRound" :quest="quest"
-                @questAnswered="questAnswered"
-                v-if="showQuest && quest" ></quest-cmp>
-    </transition> -->
-    <results-page v-if="true" @playAgain="startGame" @review="showReview"></results-page>
-    <report-page v-if="showReport"></report-page>
+    <!-- <results-page v-if="true" @playAgain="startGame" @review="showReview"></results-page>
+    <report-page v-if="showReport"></report-page> -->
   </div>
 </template>
 
 <script>
 import SignUp from './SignUp';
 import LogIn from './LogIn';
-import ReportPage from "./ReportPage"; // use router to view instead
-import ResultsPage from "./ResultsPage"; // use router to view instead
-// import QuestCmp from './QuestCmp';
-// import CountDown from './CountDown';
+// import ReportPage from "./ReportPage"; // use router to view instead
+// import ResultsPage from "./ResultsPage"; // use router to view instead
 
 import { mapGetters } from 'vuex'
 import { SET_ANSWER_ID } from '../modules/trivia.module'
-import { ADD_REPORT } from "../modules/gameReport.module"; // temporarily here
+// import { ADD_REPORT } from "../modules/gameReport.module"; // temporarily here
 
 
 export default {
@@ -87,12 +76,6 @@ export default {
     ]),
     // currUser() { return { name: 'Nina Bombina' } }
   },
-  // watch: {
-  //   quest() {
-  //     this.showQuest = false
-  //     setTimeout(_=> this.showQuest = true, 1000)
-  //   }
-  // },
   methods: {
     openSignUp() {
       this.signUpShow = !this.signUpShow;
@@ -133,17 +116,14 @@ export default {
     }
   },
   components: {
-    ReportPage,
-    ResultsPage,
     SignUp,
     LogIn
-    // QuestCmp,
-    // CountDown,
+    // ReportPage,
+    // ResultsPage,
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 h1 {
   font-weight: bold;
@@ -167,12 +147,5 @@ h1 {
 .play-button{
   margin: 15px;
 }
-// .navbar-my-style {
-//   margin-bottom: 10px;
-//   img {
-//     width: auto;
-//     height: auto;
-//   }
-// }
 
 </style>

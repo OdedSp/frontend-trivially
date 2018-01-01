@@ -1,10 +1,15 @@
+import axios from 'axios'
+
 import TriviaService from '../services/TriviaService'
 import EventBus, { RIGHT_ANSWER } from '../services/BusService'
 
+export const SET_ROUND_START = 'trivia/setRoundStartTime'
 export const SET_ANSWER_ID = 'trivia/setAnswerId'
+export const GAME_COMPLETED = 'trivia/handleGameCompleted'
 
 const state = {
     quest: null,
+    roundStartTime: null,
     userPts: 0,
     answerId: null,
     rivalAnswerId: null,
@@ -16,35 +21,31 @@ const state = {
     // rivalName: null,
     // rivalAvatar: null
 
-    gameCount: 0
+    gameStartTime: null
 
-    // currQuest: null,
-    // userScore: 0,
-    // oppScore: 0,
-    // isGameOn: false,
-    // connect: false,
-    // //להעביר להערה
-    // questions: TriviaService.getMock().slice(10,15),
 }
 const mutations = {
     SOCKET_WAITINGFOROPPONENT(state) {
         console.log('Waiting for opponent')
     },
-    SOCKET_FIRSTROUND(state, { quest, rival}) {
+    SOCKET_FIRSTROUND(state, { quest, rival, startTime}) {
+        state.userTotalPts = 0
+        state.rivalTotalPts = 0
+        state.gameStartTime = startTime
+
         state.quest = quest
+        state.roundStartTime = null
         state.userPts = 0
         state.answerId = null
         state.rivalAnswerId = null
         state.rivalPts = 0
         state.correctAnswerId = null
-        state.userTotalPts = 0
-        state.rivalTotalPts = 0
         // state.rivalName = rival.name
         // state.rivalAvatar = rival.avatar
     },
     SOCKET_NEXTROUND(state, quest) {
-        state.gameFinished = false
         state.quest = quest
+        state.roundStartTime = null
         state.userPts = 0
         state.answerId = null
         state.rivalAnswerId = null
@@ -73,15 +74,28 @@ const mutations = {
         console.log('entered answerWas', {answerId})
         state.correctAnswerId = answerId
     },
-    SOCKET_GAMECOMPLETED(state) {
-        state.gameFinished = true
+    // SOCKET_GAMECOMPLETED(state) {
+    //     state.quest = null
+    // },
+    [SET_ROUND_START](state, { startTime }) {
+        state.roundStartTime = startTime
+    },
+    [GAME_COMPLETED](state) {
         state.quest = null
+        state.startTime = null
     },
     [SET_ANSWER_ID](state, { answerId }) {
         state.answerId = answerId
     }
 }
-const actions = {}
+const actions = {
+    socket_gameCompleted({commit, getters}) {
+        commit(GAME_COMPLETED)
+        var user = getters.currUser
+        if (!user || user.name.toLowerCase() === 'guest') return
+
+    }
+}
 
 const getters = {
     currRound(state) {
@@ -100,6 +114,9 @@ const getters = {
     },
     quest(state) {
         return state.quest
+    },
+    roundStartTime(state) {
+        return state.roundStartTime
     },
     totalPts(state) {
         var rivalTotal = state.rivalTotalPts

@@ -74,6 +74,10 @@ export default {
   created() {
     // if (this.$store.getters.gameInProgress) return
     if (!this.currUser) this.$store.dispatch("addUser", {name: 'Guest'}) // temporary (hopefully)
+    if (this.quest) {
+      this.showQuest = true
+      return
+    }
     this.startGame()
   }
 };

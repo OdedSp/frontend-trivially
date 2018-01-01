@@ -20,32 +20,22 @@
 <script>
 import answerCmp from './answerCmp'
 
+import { SET_ROUND_START } from '../modules/trivia.module'
+
 export default {
-//   name: "QuestScreen",
   data() {
       return {
         showAnswers: false,
-        startTime: null,
         answered: false
+        // startTime: null,
     };
   },
   props: ['quest', 'currRound'],
-//   computed: {
-//       answers() {
-//           return this.shuffleAnswers();
-//       }
-//   },
-//   watch: {
-//     //   quest() {
-//     //       console.log('currRound changed:', this.currRound)
-//     //     //   this.answered = false
-//     //       this.showAnswers = false
-//     //       setTimeout(_=> {
-//     //           this.showAnswers = true
-//     //           this.startTime = Date.now()
-//     //       }, 500)
-//     //   }
-//   },
+  computed: {
+      startTime() {
+          return this.$store.getters.roundStartTime
+      }
+  },
   methods: {
       answerPicked(answerId) {
         if (this.answered) return
@@ -80,10 +70,12 @@ export default {
   },
   created() {
       console.log(this.quest)
-      setTimeout(_=> {
+      !this.startTime
+      ? setTimeout(_=> {
               this.showAnswers = true
-              this.startTime = Date.now()
+              this.$store.commit({ type: SET_ROUND_START, startTime: Date.now() })
       }, 500)
+      : this.showAnswers = true
   },
   watch: {
       currRound() {
