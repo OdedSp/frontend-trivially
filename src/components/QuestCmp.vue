@@ -42,26 +42,7 @@ export default {
         if (this.answered) return
         this.answered = true
         this.$emit('questAnswered', answerId, this.answerTime())
-        // if (answer === this.quest.correct_answer) {
-        //     EventBus.$emit(RIGHT_ANSWER)
-        //     this.$emit('answerChosen', true, this.answerTime())
-        // } else {
-        //     this.$emit('answerChosen', false, this.answerTime())
-        // }
     },
-    // shuffleAnswers() {
-    //   var answers = [];
-    //   for (let i = 0; i < this.quest.incorrect_answers.length; i++) {
-    //     answers.push(this.quest.incorrect_answers[i]);
-    //   }
-    //   answers.push(this.quest.correct_answer);
-      
-    //   for (let i = answers.length - 1; i > 0; i--) {
-    //     let j = Math.floor(Math.random() * (i + 1));
-    //     [answers[i], answers[j]] = [answers[j], answers[i]];
-    //   }
-    //   return answers
-    // },
     answerTime() {
         return Date.now() - this.startTime
     }

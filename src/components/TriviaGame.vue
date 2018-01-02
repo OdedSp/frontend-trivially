@@ -39,6 +39,7 @@
 import QuestCmp from './QuestCmp'
 import ScoreBoard from './ScoreBoard'
 import CountDown from './CountDown'
+import { ANSWER_TIME } from '../modules/trivia.module';
 
 import { mapGetters } from 'vuex'
 import EventBus, { RIVAL_DISCONNECTED } from '../services/BusService'
@@ -49,8 +50,7 @@ export default {
       countdown: false,
       showQuest: false,
       rivalLeft: false,
-      showRivalLeft: false,
-      timeLeft: 10, // curently not in use
+      showRivalLeft: false
     };
   },
   computed: {
@@ -68,13 +68,12 @@ export default {
       this.showQuest = false
       if (this.quest) setTimeout(_=> this.countdown = true, 1000)
       else if (this.rivalLeft) return
-      else this.$router.push('/') // for now
+      else this.$router.push('result') // for now
     }
   },
   methods: {
     questAnswered(answerId, answerTime) {
-      console.log({ answerId, answerTime });
-      // this.$store.commit({ type: SET_ANSWER_ID, answerId })
+      this.$store.commit({type: ANSWER_TIME, answerTime})
       this.$socket.emit('playerAnswer', { answerId, answerTime })
     },
     startGame() {
