@@ -19,7 +19,8 @@
 
     <transition enter-active-class="animated flipInX">
       <count-down @countedDown="seeNextQuest"
-                  :category="quest.category" v-if="!showQuest && countdown"></count-down>
+                  :category="quest.category"  :img="quest.categoryImg"
+                  v-if="!showQuest && countdown"></count-down>
     </transition>
 
     <transition enter-active-class="animated fadeIn">
