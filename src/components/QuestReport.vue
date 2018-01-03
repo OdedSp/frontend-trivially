@@ -31,7 +31,7 @@ export default {
 <style scoped lang="scss">
 .question-wrapper {
   width: 95vw;
-  margin: auto;
+  margin: 0 auto;
   h2 {
     font-weight: bold;
   }
