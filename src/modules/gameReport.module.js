@@ -51,11 +51,7 @@ const actions = {
     }
 }
 
-const getters = {
-    report: state => {
-        return state.reports
-    }
-}
+const getters = {}
 
 
 export default {

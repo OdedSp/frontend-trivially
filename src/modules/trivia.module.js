@@ -6,6 +6,7 @@ import EventBus, { RIGHT_ANSWER, RIVAL_DISCONNECTED } from '../services/BusServi
 export const ROUND_START_TIME = 'trivia/setRoundStartTime'
 export const GAME_COMPLETED = 'trivia/handleGameCompleted'
 export const RIVAL_LEFT = 'trivia/handleRivalLeft'
+export const ANSWER_TIME = 'trivia/getAnswerTime'
 
 var BASE_ROUTE = '//localhost:3003/data'
 if (process.env.NODE_ENV !== 'development') {
@@ -22,11 +23,14 @@ const state = {
     rivalAnswerId: null,
     rivalPts: 0,
     correctAnswerId: null,
+    answerTime: null,
 
     userTotalPts: 0,
     rivalTotalPts: 0,
+    userName: null,
     rivalName: null,
     rivalAvatar: null,
+    winner: null,
 
     gameStartTime: null,
 
@@ -70,6 +74,12 @@ const mutations = {
         state.roundStartTime = startTime
     },
     [GAME_COMPLETED](state) {
+        if (state.userTotalPts >= state.rivalTotalPts) {
+            state.winner = 'user'
+        } else {
+            state.winner = 'rival'
+        }
+        console.log(state.winner);
         if (state.quest) pushRoundReport(state)
         state.quest = null
         state.userTotalPts = 0
@@ -81,6 +91,10 @@ const mutations = {
         state.rivalName = null
         state.rivalAvatar = null
         state.quest = null
+    },
+    [ANSWER_TIME](state, {answerTime}) {
+        state.answerTime = answerTime
+        console.log(state.answerTime);
     }
 }
 const actions = {
@@ -145,22 +159,24 @@ const getters = {
     },
     waitingForRival(state) {
         return state.waitingForRival
+    },
+    report: state => {
+        return state.roundReports
+    },
+    winner: state => {
+        return state.winner
     }
-    // rival(state) {
-    //     return {
-    //         name: state.rivalName,
-    //         avatar: state.rivalAvatar
-    //     }
-    // }
 }
 
 function pushRoundReport(state) {
     state.roundReports.push({
         quest: state.quest,
         userPts: state.userPts,
+        answerTime: state.answerTime,
         rivalPts: state.rivalPts,
         answerId: state.answerId,
-        rivalAnswerId: state.rivalAnswerId
+        rivalAnswerId: state.rivalAnswerId,
+        correctAnswerId: state.correctAnswerId
     })
 }
 

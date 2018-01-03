@@ -1,16 +1,17 @@
 <template>
-  <div>
+  <div class="report-page">
     <transition enter-active-class="animated fadeInRightBig" leave-active-class="animated fadeOutLeftBig">
-    <quest-result v-for="(quest, i) in report" :key="i" :questReport="report[i]" v-if="currQuestReportIdx===i">
-    </quest-result>
+      <quest-report v-for="(quest, i) in report" :key="i" :questReport="report[i]" v-if="currQuestReportIdx===i"/>
     </transition>
-    <a class="pagination-previous" @click="flipBack">⪦</a>
-    <a class="pagination-next" @click="flipNext">⪧</a>
+    <div class="flip">
+      <a class="pagination-previous" @click="flipBack">⪦</a>
+      <a class="pagination-next" @click="flipNext">⪧</a>
+    </div>
   </div>
 </template>
 
 <script>
-import QuestResult from "./QuestResult";
+import QuestReport from "./QuestReport";
 
 export default {
   data() {
@@ -55,15 +56,24 @@ export default {
     },
   },
   components: {
-    QuestResult
+    QuestReport
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
-
-a {
-  
+.report-page {
+height: 60vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+  .flip {
+    position: absolute;
+    bottom: 10vh;
+    
+  }
 }
+
 </style>

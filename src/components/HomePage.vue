@@ -1,25 +1,19 @@
 <template>
   <div>
     <transition leave-active-class="animated zoomOut">
-      <div v-if="!currUser && !gameIsStarting" class="buttons user-info">
+      <div v-if="!currUser && !gameStarted" class="buttons user-info">
         <button class="button is-info" @click="openLogin">Log In</button>
         <button class="button is-info" @click="openSignUp">Sign Up</button>
       </div>
-      <div v-else-if="!gameIsStarting" class="status-bar user-info">
+      <div v-else-if="!gameStarted" class="status-bar user-info">
         <div class="user">
           <p>Hello {{currUser.name}}</p>
-          <!-- <p v-if="quest">pnts</p> -->
         </div>
-        <!-- <div v-if="quest" class="opponent">
-          <p>opponent name</p> -->
-          <!-- <p>{{timeLeft}}</p> -->
-          <!-- <p>pnts</p>
-        </div> -->
       </div>
     </transition>
     <transition leave-active-class="animated zoomOut">
       <!-- <section class="game-start" v-if="!quest"> -->
-      <section class="game-start" v-if="!gameIsStarting">
+      <section class="game-start" v-if="!gameStarted">
         <section class="hero is-primary is-bold">
           <div class="hero-body">
             <div class="container">
@@ -40,20 +34,14 @@
 
     <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
     <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>  
-
-    <!-- <results-page v-if="true" @playAgain="startGame" @review="showReview"></results-page>
-    <report-page v-if="showReport"></report-page> -->
   </div>
 </template>
 
 <script>
 import SignUp from './SignUp';
 import LogIn from './LogIn';
-// import ReportPage from "./ReportPage"; // use router to view instead
-// import ResultsPage from "./ResultsPage"; // use router to view instead
 
 import { mapGetters } from 'vuex'
-// import { ADD_REPORT } from "../modules/gameReport.module"; // temporarily here
 
 
 export default {
@@ -63,8 +51,7 @@ export default {
       signUpShow: false,
       loginShow: false,
       showQuest: false,
-      gameIsStarting: false,
-      showReport: false // temp
+      gameStarted: false,
     };
   },
   computed: {
@@ -100,22 +87,16 @@ export default {
       this.createUser(guest)
     },
     startGame() {
-      this.gameIsStarting = true
+      this.gameStarted = true
       if (!this.currUser) {
         this.createGuest()
       }
       setTimeout(_=> this.$router.push('game'), 500)
-    },
-    showReview() { //temp
-
-      this.showReport = true
     }
   },
   components: {
     SignUp,
     LogIn
-    // ReportPage,
-    // ResultsPage,
   }
 };
 </script>
@@ -125,17 +106,6 @@ h1 {
   font-weight: bold;
   text-transform: uppercase;
 }
-// ul {
-//   list-style-type: none;
-//   padding: 0;
-// }
-// li {
-//   display: inline-block;
-//   margin: 0 10px;
-// }
-// a {
-//   color: #42b983;
-// }
 .user-info {
   padding: 0 1rem;
   margin-top: 1rem;
