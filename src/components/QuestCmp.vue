@@ -26,6 +26,7 @@ import { ROUND_START_TIME } from '../modules/trivia.module'
 export default {
   data() {
       return {
+        timeLeft: 15 * 1000,
         showAnswers: false,
         answered: false
         // startTime: null,
@@ -55,14 +56,10 @@ export default {
       !this.startTime
       ? setTimeout(_=> {
               this.showAnswers = true
+              this.$emit('startTheClock')
               this.$store.commit({ type: ROUND_START_TIME, startTime: Date.now() })
       }, 500)
       : this.showAnswers = true
-  },
-  watch: {
-      currRound() {
-          console.log({currRound: this.currRound})
-      }
   }
 };
 </script>
@@ -106,9 +103,9 @@ export default {
             width: 10px;
             left: 0;
             top: 0;
-            border-right: 3px solid dodgerblue;
-            border-left: 3px solid dodgerblue;
-            background-color: #00002e;
+            border-right: 3px solid var(--player-color);
+            border-left: 3px solid var(--player-color);
+            background-color: var(--main-bg-color);
         }
         &.rivalPick::after {
             position: absolute;
@@ -117,9 +114,9 @@ export default {
             width: 10px;
             right: 0;
             top: 0;
-            border-right: 3px solid gold;
-            border-left: 3px solid gold;
-            background-color: #00002e;
+            border-right: 3px solid var(--rival-color);
+            border-left: 3px solid var(--rival-color);
+            background-color: var(--main-bg-color);
         }
     }
 }

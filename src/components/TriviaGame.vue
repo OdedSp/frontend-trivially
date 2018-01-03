@@ -13,7 +13,7 @@
     
     <transition leave-active-class="animated slideOutRight">
       <quest-cmp :currRound="currRound" :quest="quest" :correctId="correctAnswerId"
-                @questAnswered="questAnswered"
+                @questAnswered="questAnswered" @startTheClock="startTheClock"
                 v-if="showQuest && quest" ></quest-cmp>
     </transition>
 
@@ -31,6 +31,8 @@
         </button>
       </div>
     </transition>
+
+    <time-left-bar v-if="timeToAnswer !== null" :timeToAnswer="timeToAnswer"></time-left-bar>
     
     
   </section>
@@ -40,7 +42,8 @@
 import QuestCmp from './QuestCmp'
 import ScoreBoard from './ScoreBoard'
 import CountDown from './CountDown'
-import { ANSWER_TIME } from '../modules/trivia.module';
+import timeLeftBar from './timeLeftBar'
+// import { ANSWER_TIME } from '../modules/trivia.module';
 
 import { mapGetters } from 'vuex'
 import EventBus, { RIVAL_DISCONNECTED } from '../services/BusService'
@@ -51,7 +54,9 @@ export default {
       countdown: false,
       showQuest: false,
       rivalLeft: false,
-      showRivalLeft: false
+      showRivalLeft: false,
+      timeToAnswer: null,
+      timerId: null
     };
   },
   computed: {
@@ -67,6 +72,8 @@ export default {
   watch: {
     quest() {
       this.showQuest = false
+      this.timeToAnswer = null
+      clearInterval(this.timerId)
       if (this.quest) setTimeout(_=> this.countdown = true, 1000)
       else if (this.rivalLeft) return
       else this.$router.push('result') // for now
@@ -74,8 +81,8 @@ export default {
   },
   methods: {
     questAnswered(answerId, answerTime) {
-      this.$store.commit({type: ANSWER_TIME, answerTime})
       this.$socket.emit('playerAnswer', { answerId, answerTime })
+      // this.$store.commit({type: ANSWER_TIME, answerTime})
     },
     startGame() {
       this.rivalLeft = false
@@ -84,13 +91,27 @@ export default {
     },
     seeNextQuest() {
       this.countdown = false
+      this.timeToAnswer = 10
       this.showQuest = true
+    },
+    startTheClock() {
+      this.timerId = setInterval(_=> {
+        this.timeToAnswer--
+        if (this.timeToAnswer === 0) {
+          clearInterval(this.timerId)
+          setTimeout(_=> this.questAnswered('noAnswer', null), 1000)
+        }
+      }, 1000)
+    },
+    destroyed() {
+      clearInterval(this.timerId)
     }
   },
   components: {
     QuestCmp,
     ScoreBoard,
-    CountDown
+    CountDown,
+    timeLeftBar
   },
   created() {
     // if (this.$store.getters.gameInProgress) return
@@ -98,7 +119,7 @@ export default {
       this.rivalLeft = true
       setTimeout(_=> this.showRivalLeft = true, 1000)
     })
-    if (!this.currUser) this.$store.dispatch("addUser", {name: 'Guest'}) // temporary (hopefully)
+    if (!this.currUser) this.$store.dispatch("addUser", { name: 'Guest' }) // temporary (hopefully)
     if (this.quest) {
       this.showQuest = true
       return

@@ -53,10 +53,10 @@ export default {
     border-radius: 5px;
     box-shadow: 0 0 4px gray;
     &.correct {
-      background: green;
+      background: var(--correct-color);
     }
     &.incorrect {
-      background: red;
+      background: var(--incorrect-color);
     }
   }
 }
