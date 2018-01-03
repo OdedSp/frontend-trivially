@@ -53,10 +53,10 @@ export default {
     border-radius: 5px;
     box-shadow: 0 0 4px gray;
     &.correct {
-      background: #00d1b2;
+      background: var(--correct-color);
     }
     &.incorrect {
-      background: #ff3860;
+      background: var(--incorrect-color);
     }
   }
   .question-wrapper {

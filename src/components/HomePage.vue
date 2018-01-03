@@ -32,8 +32,11 @@
       </section>
     </transition>
 
-    <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
-    <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>  
+    <!-- <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up> -->
+    <!-- <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>   -->
+
+    <!-- <results-page v-if="true" @playAgain="startGame" @review="showReview"></results-page>
+    <report-page v-if="showReport"></report-page> -->
   </div>
 </template>
 
@@ -61,10 +64,11 @@ export default {
   },
   methods: {
     openSignUp() {
-      this.signUpShow = !this.signUpShow;
-      if (this.loginShow) {
-        this.loginShow = false;
-      }
+      // this.signUpShow = !this.signUpShow;
+      // if (this.loginShow) {
+      //   this.loginShow = false;
+      // }
+      this.$router.push('/signup')
     },
     openLogin() {
       this.loginShow = !this.loginShow;
@@ -72,25 +76,12 @@ export default {
         this.signUpShow = false;
       }
     },
-    createUser(userObj) {
-      this.$store.dispatch("addUser", userObj);
-      this.signUpShow = false;
-    },
     loginUser(userObj) {
       this.$store.dispatch("loginUser", userObj);
       this.loginShow = false;
     },
-    createGuest() {
-      var guest = {
-        name: 'guest'
-      }
-      this.createUser(guest)
-    },
     startGame() {
       this.gameStarted = true
-      if (!this.currUser) {
-        this.createGuest()
-      }
       setTimeout(_=> this.$router.push('game'), 500)
     }
   },
