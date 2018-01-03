@@ -32,8 +32,11 @@
       </section>
     </transition>
 
-    <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up>
-    <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>  
+    <!-- <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up> -->
+    <!-- <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>   -->
+
+    <!-- <results-page v-if="true" @playAgain="startGame" @review="showReview"></results-page>
+    <report-page v-if="showReport"></report-page> -->
   </div>
 </template>
 
@@ -61,10 +64,11 @@ export default {
   },
   methods: {
     openSignUp() {
-      this.signUpShow = !this.signUpShow;
-      if (this.loginShow) {
-        this.loginShow = false;
-      }
+      // this.signUpShow = !this.signUpShow;
+      // if (this.loginShow) {
+      //   this.loginShow = false;
+      // }
+      this.$router.push('/signup')
     },
     openLogin() {
       this.loginShow = !this.loginShow;
