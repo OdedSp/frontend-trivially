@@ -1,5 +1,7 @@
 <template>
   <div class="report-page">
+    <button class="button is-warning toggle report-button"
+       @click="closeReview">Close questions ↑</button>
     <transition enter-active-class="animated fadeInRightBig" leave-active-class="animated fadeOutLeftBig">
       <quest-report v-for="(quest, i) in report" :key="i" :questReport="report[i]" v-if="currQuestReportIdx===i"/>
     </transition>
@@ -54,6 +56,9 @@ export default {
         }, 1000);
       }
     },
+    closeReview() {
+      this.$emit('review')
+    }
   },
   components: {
     QuestReport
@@ -74,6 +79,14 @@ align-items: center;
     bottom: 10vh;
     
   }
+}
+.report-button {
+  margin: 0;
+  position: relative;
+  top: -10px;
+  padding-bottom: 30px;
+  width: 100%;
+  height: 30px
 }
 
 </style>

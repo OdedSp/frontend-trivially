@@ -1,15 +1,10 @@
 <template>
   <div>
-    <transition>
-      <results-page v-if="!showReport"/>
+    <transition leave-active-class="animated fadeOutUpBig" enter-active-class="animated fadeInDownBig">
+      <results-page @review="review" v-if="!showReport"/>
     </transition>
-    <section class="buttons">
-      <button class="button is-warning is-bold" @click="playAgain"  v-if="!showReport">Play again?</button>
-      <button class="button is-warning toggle"
-              :class="{'report': showReport, 'result': !showReport}" @click="review">{{resButton}}</button>
-    </section>
-    <transition leave-active-class="animated fadeOutDownBig">
-      <report-page v-if="showReport"/>
+    <transition leave-active-class="animated fadeOutDownBig" enter-active-class="animated fadeInUpBig">
+      <report-page @review="review" v-if="showReport"/>
     </transition>
   </div>
 </template>
@@ -29,21 +24,10 @@ export default {
       showReport: false
     };
   },
-  computed: {
-    resButton() {
-      if (this.showReport) {
-        return "Close results ↑";
-      } else {
-        return "View results ↓";
-      }
-    }
-  },
+  computed: {},
   methods: {
     review() {
       this.showReport = !this.showReport;
-    },
-    playAgain() {
-      this.$router.push("game");
     }
   },
   components: {
@@ -54,23 +38,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.buttons {
-  margin: auto;
-  justify-content: center;
-  .toggle {
-    width: 100%;
-    height: 30px
-  }
-  .report {
-    margin: 0;
-    position: relative;
-    top: -10px;
-    padding-bottom: 30px
-  }
-  .result{
-    position: fixed;
-    bottom: 0;
-    margin-bottom: 0
-  }
-}
 </style>

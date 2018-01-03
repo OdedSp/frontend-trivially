@@ -26,7 +26,10 @@
           {{result.rivalPts}}
         </span>
       </p> -->
-    </section>
+    <button class="button is-warning is-bold" @click="playAgain">Play again?</button>
+    <button class="button is-warning toggle resultPage"
+       @click="review">View questions ↓</button>
+  </section>
 </template>
 
 <script>
@@ -67,6 +70,14 @@ export default {
         var user = this.$store.getters.currUser;
         return user.name
     }
+  },
+  methods: {
+    playAgain() {
+      this.$router.push("game");
+    },
+    review() {
+      this.$emit('review')
+    }
   }
 };
 </script>
@@ -80,6 +91,14 @@ export default {
 }
 .white {
   color: whitesmoke
+}
+.resultPage{
+  width: 100%;
+  height: 30px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 0
 }
 
 .players{
