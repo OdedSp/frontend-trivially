@@ -69,7 +69,7 @@ export default {
       this.showQuest = false
       if (this.quest) setTimeout(_=> this.countdown = true, 1000)
       else if (this.rivalLeft) return
-      else this.$router.push('result') // for now
+      else this.$router.push('gamedone') // for now
     }
   },
   methods: {

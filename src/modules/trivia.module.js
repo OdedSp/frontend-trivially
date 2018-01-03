@@ -42,6 +42,7 @@ const mutations = {
         state.waitingForRival = true
     },
     SOCKET_FIRSTROUND(state, { quest, rival, createdAt }) {
+        state.roundReports = []
         state.waitingForRival = false
         state.userTotalPts = 0
         state.rivalTotalPts = 0
@@ -67,19 +68,19 @@ const mutations = {
         state.rivalTotalPts += points
     },
     SOCKET_ANSWERWAS(state, answerId) {
-        console.log({correctAnswerId: answerId})
         state.correctAnswerId = answerId
     },
     [ROUND_START_TIME](state, { startTime }) {
         state.roundStartTime = startTime
     },
     [GAME_COMPLETED](state) {
-        if (state.userTotalPts >= state.rivalTotalPts) {
+        if (state.userTotalPts > state.rivalTotalPts) {
             state.winner = 'user'
-        } else {
+        } else if (state.userTotalPts < state.rivalTotalPts) {
             state.winner = 'rival'
+        } else {
+            state.winner = 'draw'
         }
-        console.log(state.winner);
         if (state.quest) pushRoundReport(state)
         state.quest = null
         state.userTotalPts = 0
@@ -94,7 +95,6 @@ const mutations = {
     },
     [ANSWER_TIME](state, {answerTime}) {
         state.answerTime = answerTime
-        console.log(state.answerTime);
     }
 }
 const actions = {
@@ -163,8 +163,18 @@ const getters = {
     report: state => {
         return state.roundReports
     },
-    winner: state => {
-        return state.winner
+    result: state => {
+        var totalUserPts = state.roundReports.reduce((acc, report) => {
+            return acc + report.userPts
+        }, 0);
+        var totalRivalPts = state.roundReports.reduce((acc, report) => {
+            return acc + report.rivalPts
+        }, 0);
+        return {
+            winner: state.winner,
+            userPts: totalUserPts,
+            rivalPts: totalRivalPts
+        }
     }
 }
 

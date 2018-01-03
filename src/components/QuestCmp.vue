@@ -51,18 +51,12 @@ export default {
       answerCmp
   },
   created() {
-      console.log(this.quest)
       !this.startTime
       ? setTimeout(_=> {
               this.showAnswers = true
               this.$store.commit({ type: ROUND_START_TIME, startTime: Date.now() })
       }, 500)
       : this.showAnswers = true
-  },
-  watch: {
-      currRound() {
-          console.log({currRound: this.currRound})
-      }
   }
 };
 </script>

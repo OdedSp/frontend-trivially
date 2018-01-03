@@ -1,7 +1,7 @@
 import Router from 'vue-router'
 import HomePage from '@/components/HomePage'
 import TriviaGame from '@/components/TriviaGame'
-import resultsPage from '@/components/resultsPage'
+import GameEndPage from '@/components/GameEndPage'
 
 
 export default new Router({
@@ -17,9 +17,9 @@ export default new Router({
       component: TriviaGame
     },
     {
-      path: '/result',
-      name: 'result',
-      component: resultsPage
+      path: '/gamedone',
+      name: 'gamedone',
+      component: GameEndPage
     }
   ]
 })

@@ -60,7 +60,6 @@ export default {
     },
     watch: {
         currRound() {
-            console.log('entered currRound watch')
             if (!this.userRoundPtsShown && this.currRound.userPts) {
                 this.userRoundPtsShown = true
                 this.userRoundPts = this.currRound.userPts
