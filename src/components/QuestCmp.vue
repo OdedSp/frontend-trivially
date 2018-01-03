@@ -88,10 +88,10 @@ export default {
         border-radius: 5px;
         box-shadow: 0 0 4px gray;
         &.correct {
-            background: green
+            background: #00d1b2
         }
         &.incorrect {
-            background: red
+            background: #ff3860
         }
         &.userPick::before {
             position: absolute;
