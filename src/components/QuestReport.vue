@@ -59,5 +59,8 @@ export default {
       background: red;
     }
   }
+  .question-wrapper {
+    max-height: 40vh;
+  }
 }
 </style>

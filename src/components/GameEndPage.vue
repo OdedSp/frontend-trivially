@@ -62,8 +62,10 @@ export default {
     height: 30px
   }
   .report {
-    position: fixed;
-    top: 52px
+    margin: 0;
+    position: relative;
+    top: -10px;
+    padding-bottom: 30px
   }
   .result{
     position: fixed;
