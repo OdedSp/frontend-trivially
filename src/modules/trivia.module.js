@@ -6,7 +6,7 @@ import EventBus, { RIGHT_ANSWER, RIVAL_DISCONNECTED } from '../services/BusServi
 export const ROUND_START_TIME = 'trivia/setRoundStartTime'
 export const GAME_COMPLETED = 'trivia/handleGameCompleted'
 export const RIVAL_LEFT = 'trivia/handleRivalLeft'
-export const ANSWER_TIME = 'trivia/getAnswerTime'
+// export const ANSWER_TIME = 'trivia/getAnswerTime'
 
 var BASE_ROUTE = '//localhost:3003/data'
 if (process.env.NODE_ENV !== 'development') {
@@ -24,6 +24,7 @@ const state = {
     rivalPts: 0,
     correctAnswerId: null,
     answerTime: null,
+    rivalAnswerTime: null,
 
     userTotalPts: 0,
     rivalTotalPts: 0,
@@ -56,16 +57,18 @@ const mutations = {
         pushRoundReport(state)
         resetRound(state, quest)
     },
-    SOCKET_ANSWERPROCESSED(state, { answerId, points }) {
+    SOCKET_ANSWERPROCESSED(state, { answerId, points, answerTime }) {
         state.userPts = points
         state.userTotalPts += points
         state.answerId = answerId
+        state.answerTime = answerTime
         if (points) EventBus.$emit(RIGHT_ANSWER)
     },
-    SOCKET_RIVALANSWER(state, { answerId, points }) {
-        state.rivalAnswerId = answerId
+    SOCKET_RIVALANSWER(state, { answerId, points, answerTime }) {
         state.rivalPts = points
         state.rivalTotalPts += points
+        state.rivalAnswerId = answerId
+        state.rivalAnswerTime = answerTime
     },
     SOCKET_ANSWERWAS(state, answerId) {
         state.correctAnswerId = answerId
@@ -92,10 +95,11 @@ const mutations = {
         state.rivalName = null
         state.rivalAvatar = null
         state.quest = null
-    },
-    [ANSWER_TIME](state, {answerTime}) {
-        state.answerTime = answerTime
     }
+    // [ANSWER_TIME](state, { answerTime }) {
+    //     state.answerTime = answerTime
+    //     console.log(state.answerTime);
+    // }
 }
 const actions = {
     socket_gameCompleted({ state, commit, getters }) {
@@ -181,11 +185,12 @@ const getters = {
 function pushRoundReport(state) {
     state.roundReports.push({
         quest: state.quest,
-        userPts: state.userPts,
-        answerTime: state.answerTime,
-        rivalPts: state.rivalPts,
         answerId: state.answerId,
+        answerTime: state.answerTime,
+        userPts: state.userPts,
         rivalAnswerId: state.rivalAnswerId,
+        rivalAnswerTime: state.rivalAnswerTime,
+        rivalPts: state.rivalPts,
         correctAnswerId: state.correctAnswerId
     })
 }
@@ -193,9 +198,11 @@ function pushRoundReport(state) {
 function resetRound(state, quest=null) {
     state.quest = quest
     state.roundStartTime = null
-    state.userPts = 0
     state.answerId = null
+    state.answerTime = null
+    state.userPts = 0
     state.rivalAnswerId = null
+    state.rivalAnswerTime = 0
     state.rivalPts = 0
     state.correctAnswerId = null
 }
