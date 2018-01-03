@@ -56,7 +56,8 @@ export default {
       rivalLeft: false,
       showRivalLeft: false,
       timeToAnswer: null,
-      timerId: null
+      timerId: null,
+      answered: false
     };
   },
   computed: {
@@ -73,6 +74,7 @@ export default {
     quest() {
       this.showQuest = false
       this.timeToAnswer = null
+      this.answered = false
       clearInterval(this.timerId)
       if (this.quest) setTimeout(_=> this.countdown = true, 1000)
       else if (this.rivalLeft) return
@@ -81,6 +83,7 @@ export default {
   },
   methods: {
     questAnswered(answerId, answerTime) {
+      this.answered = true
       this.$socket.emit('playerAnswer', { answerId, answerTime })
       // this.$store.commit({type: ANSWER_TIME, answerTime})
     },
@@ -99,7 +102,7 @@ export default {
         this.timeToAnswer--
         if (this.timeToAnswer === 0) {
           clearInterval(this.timerId)
-          setTimeout(_=> this.questAnswered('noAnswer', null), 1000)
+          if (!this.answered) setTimeout(_=> this.questAnswered('noAnswer', null), 1000)
         }
       }, 1000)
     },
