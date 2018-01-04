@@ -20,7 +20,6 @@ function registerUser(user) {
             })
             .catch(err => console.log(err))
         } else {
-            debugger
             axios.post(REGISTER_USER_URL, user)
             .then((res) => {
                 resolve(res)

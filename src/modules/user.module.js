@@ -2,11 +2,11 @@ import UserService from '../services/UserService'
 
 export const REGISTER_USER = 'user/REGISTER_USER'
 export const LOGIN_USER = 'user/LOGIN_USER'
+export const LOGOUT_USER = 'user/LOGOUT_USER'
 
 const state = {
     currUser: null,
     userIsLoggedIn: false
-    // currUser: {name: 'ninabombina'} // for testing purposes
 }
 
 const mutations = {
@@ -15,6 +15,10 @@ const mutations = {
     },
     setUserLoggedIn (state){
         state.userIsLoggedIn = true
+    },
+    setUserLogOut (state){
+        state.userIsLoggedIn = false
+        state.currUser = null
     }
 }
 
@@ -41,6 +45,10 @@ const actions = {
             console.log(err)
             store.commit('setUser', {username: 'guest'})
         })
+    },
+    [LOGOUT_USER](store){
+        console.log('logged out')
+        store.commit('setUserLogOut')
     }
 }
 
