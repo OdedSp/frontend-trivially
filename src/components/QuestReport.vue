@@ -11,20 +11,20 @@
             :wasAnswer="questReport.answerId !== answer.id && questReport.rivalAnswerId !== answer.id && questReport.correctAnswerId === answer.id">
         </answer-cmp>
       </div>
-      <stats-cmp :questReport="questReport"/>
+      <quest-stats :questReport="questReport"/>
       <!-- <progress class="progress is-link is-large" :value="questReport.percentage" max="100">BLABLABLA</progress> -->
   </div>
 </template>
 
 <script>
 import answerCmp from './answerCmp'
-import StatsCmp from './StatsCmp'
+import QuestStats from './QuestStats'
 
 export default {
   props: ['questReport'],
   components: {
     answerCmp,
-    StatsCmp
+    QuestStats
   }
 };
 </script>

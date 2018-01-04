@@ -1,7 +1,7 @@
 <template>
   <div class="report-page">
     <button class="button is-warning toggle report-button"
-       @click="closeReview">Close questions ↑</button>
+       @click="closeReview">Back to match results <span>&nbsp;⇧</span></button>
     <!-- <transition enter-active-class="animated fadeInRightBig" leave-active-class="animated fadeOutLeftBig"> -->
     <div class="report-wrapper">
       <transition :name="direction">
@@ -109,7 +109,10 @@ export default {
   top: -10px;
   padding-bottom: 30px;
   width: 100%;
-  height: 30px
+  font-size: 1.1em;
+  span{
+    color: var(--theme-color)
+  }
 }
 
 .next-leave-active, .next-enter-active, .back-leave-active, .back-enter-active {

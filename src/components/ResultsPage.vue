@@ -6,29 +6,23 @@
           <article class="user notification" 
           :class="{
               'is-primary': result.winner==='user',
-              'is-danger': result.winner==='rival'}">
+              'is-danger': result.winner==='rival',
+              'is-info': result.winner==='draw'}">
               <p class="name">{{username}}</p>
               <p class="score" v-html="result.userPts"></p>
           </article>
           <article class="rival notification"
           :class="{
               'is-primary': result.winner==='rival',
-              'is-danger': result.winner==='user'}">
+              'is-danger': result.winner==='user',
+              'is-info': result.winner==='draw'}">
               <p class="name">Rival</p>
               <p class="score" v-html="result.rivalPts"></p>
           </article>
       </section>
-      <!-- <p class="subtitle white">
-        <span :class="msg.userColor">
-          {{result.userPts}}
-        </span>{{msg.direction}}
-        <span :class="msg.rivalColor">
-          {{result.rivalPts}}
-        </span>
-      </p> -->
-    <button class="button is-warning is-bold" @click="playAgain">Play again?</button>
+    <button class="button is-warning is-bold playAgain" @click="playAgain">Play again?</button>
     <button class="button is-warning toggle resultPage"
-       @click="review">View questions ↓</button>
+       @click="review">View questions <span>&nbsp;⇩</span></button>
   </section>
 </template>
 
@@ -97,13 +91,19 @@ export default {
   height: calc(100vh - 63px);
 }
 
+.playAgain {
+  margin: 15px;
+}
+
 .resultPage{
   width: 100%;
-  height: 30px;
   position: absolute;
   bottom: 0;
   left: 0;
-  margin-bottom: 0
+  margin-bottom: 0;
+  span{
+    color: var(--theme-color)
+  }
 }
 
 .players{
