@@ -191,8 +191,20 @@ function pushRoundReport(state) {
         rivalAnswerId: state.rivalAnswerId,
         rivalAnswerTime: state.rivalAnswerTime,
         rivalPts: state.rivalPts,
-        correctAnswerId: state.correctAnswerId
+        correctAnswerId: state.correctAnswerId,
+        percentage: calculatePercentage(state)
     })
+}
+
+function calculatePercentage(state) {
+    let nom = state.quest.answeredCorrectlyCount
+    let denom = state.quest.answeredCorrectlyCount+state.quest.answeredIncorrectlyCount+2
+    if (state.userPts && state.rivalPts) {
+        nom += 2
+    } else if (!state.userPts && state.rivalPts || state.userPts && !state.rivalPts) {
+        nom++
+    } 
+    return Math.round(nom/denom*100)
 }
 
 function resetRound(state, quest=null) {

@@ -84,13 +84,13 @@ export default {
 
 <style lang="scss" scoped>
 .primary {
-  color:#00d1b2
+  color:var(--correct-color)
 }
 .danger {
-  color: #ff3860; 
+  color: var(--incorrect-color); 
 }
 .white {
-  color: whitesmoke
+  color: var(--theme-color)
 }
 
 .result {

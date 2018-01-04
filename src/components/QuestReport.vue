@@ -10,24 +10,30 @@
             :rivalPickAndIncorrect="questReport.rivalAnswerId === answer.id && !questReport.rivalPts"
             :wasAnswer="questReport.answerId !== answer.id && questReport.rivalAnswerId !== answer.id && questReport.correctAnswerId === answer.id">
         </answer-cmp>
-        {{questReport.answerTime}}s
       </div>
+      <stats-cmp :questReport="questReport"/>
+      <!-- <progress class="progress is-link is-large" :value="questReport.percentage" max="100">BLABLABLA</progress> -->
   </div>
 </template>
 
 <script>
 import answerCmp from './answerCmp'
+import StatsCmp from './StatsCmp'
 
 export default {
   props: ['questReport'],
   components: {
-    answerCmp
+    answerCmp,
+    StatsCmp
   }
 };
 </script>
 
 <style scoped lang="scss">
 .question-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 95vw;
   margin: 0 auto;
   h2 {
@@ -46,7 +52,7 @@ export default {
     outline: none;
     border-style: none;
     padding: 10px;
-    margin: 15px;
+    margin: 7px;
     background-color: lightblue;
     border-radius: 5px;
     box-shadow: 0 0 4px gray;
@@ -56,9 +62,6 @@ export default {
     &.incorrect {
       background: var(--incorrect-color);
     }
-  }
-  .question-wrapper {
-    max-height: 40vh;
   }
 }
 </style>

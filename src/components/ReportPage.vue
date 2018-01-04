@@ -13,8 +13,8 @@
         </div>
       </transition>
       <div class="flip">
-        <a class="pagination pagination-previous" @click="flipBack">⪦</a>
-        <a class="pagination pagination-next" @click="flipNext">⪧</a>
+        <button class="pagination pagination-previous button is-link" @click="flipBack">⪦</button>
+        <button class="pagination pagination-next button is-link" @click="flipNext">⪧</button>
       </div>
     </div>
   </div>
@@ -98,7 +98,7 @@ export default {
     justify-content: center;
     width: 100vw;
     bottom: 5vh;
-    a {
+    button {
       flex-grow: 0;
     }
   }

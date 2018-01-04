@@ -14,7 +14,7 @@
     <transition leave-active-class="animated zoomOut">
       <!-- <section class="game-start" v-if="!quest"> -->
       <section class="game-start" v-if="!gameStarted">
-        <section class="hero is-primary is-bold">
+        <section class="hero is-link is-bold">
           <div class="hero-body">
             <div class="container">
               <h1 class="title">

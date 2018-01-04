@@ -3,7 +3,7 @@
 
 <!-- TODO: make player-stats component to avoid all of this repetition -->
         <div class="player myself">
-            <div class="static-info">
+            <div class="static-info user">
                 <h3 v-if="user">{{user.name}}</h3>
                 <!-- <img src="{{user.avatar}}" alt="user avatar"> -->
             </div>
@@ -28,7 +28,7 @@
                     {{totalPts.rivalTotal}}
                 </h2>
             </div>
-            <div class="static-info">
+            <div class="static-info rival">
                 <h3>Rival</h3>
                 <!-- <h3>{{rival.name}}</h3> -->
                 <!-- <img src="{{rival.avatar}}" alt="user avatar"> -->
@@ -96,12 +96,24 @@ export default {
             font-weight: 500;
         }
         .live-score {
-            color: #00d7bb;
+            color: var(--theme-color);
         }
         .round-score {
             font-size: 80%;
         }
 
+    }
+}
+
+.static-info.user {
+    h3 {
+        color: var(--player-color)
+    }
+}
+
+.static-info.rival {
+    h3 {
+        color: var(--rival-color)
     }
 }
 
