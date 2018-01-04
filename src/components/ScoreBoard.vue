@@ -5,7 +5,9 @@
         <div v-if="user" class="player myself">
             <div class="static-info">
                 <h3>{{user.username}}</h3>
-                <img :src="user.avatar" alt="user avatar">
+                <div class="player-img">
+                    <img :src="user.avatar" alt="user avatar">
+                </div>
             </div>
             <div class="live-score">
                 <h2>
@@ -32,7 +34,9 @@
                 <h3 v-if="rival">{{rival.username}}</h3>
                 <h3 v-else-if="waitingForRival">Waiting for opponent</h3>
                 <h3 v-else>No opponent</h3>
-                <img v-if="rival" :src="rival.avatar" alt="rival avatar">
+                <div class="player-img">
+                    <img v-if="rival" :src="rival.avatar" alt="rival avatar">
+                </div>
             </div>
         </div>
 
@@ -102,9 +106,16 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        img {
+        .player-img {
             width: 2.4em;
+            height: 2.4em;
             border-radius: 50%;
+            overflow: hidden;
+            img {
+                max-height: 100%;
+                width: auto;
+                max-width: none;
+            }
         }
         div:not(:last-child) {
             margin-right: .5rem;
