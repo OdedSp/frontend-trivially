@@ -5,6 +5,7 @@ import GameEndPage from '@/components/GameEndPage'
 // import ResultsPage from '@/components/ResultsPage'
 import SignUp from '@/components/SignUp'
 import UserProfile from '@/components/UserProfile'
+import LogIn from '@/components/LogIn'
 
 
 export default new Router({
@@ -33,6 +34,11 @@ export default new Router({
       path: '/profile',
       name: 'UserProfile',
       component: UserProfile
+    },
+    {
+      path: '/login',
+      name: 'LogIn',
+      component: LogIn
     }
   ]
 })
