@@ -1,15 +1,6 @@
 <template>
   <div>
     <transition leave-active-class="animated zoomOut">
-      <div v-if="!currUser && !gameStarted" class="buttons user-info">
-        <button class="button is-info" @click="openLogin">Log In</button>
-        <button class="button is-info" @click="openSignUp">Sign Up</button>
-      </div>
-      <div v-else-if="!gameStarted" class="status-bar user-info">
-        <div class="user">
-          <p>Hello {{currUser.name}}</p>
-        </div>
-      </div>
     </transition>
     <transition leave-active-class="animated zoomOut">
       <!-- <section class="game-start" v-if="!quest"> -->
@@ -26,9 +17,22 @@
             </div>
           </div>
         </section>
-        <button class="button is-success play-button" @click="startGame">
-          Play<span v-if="!currUser">&nbsp;as Guest</span>
-        </button>
+        <div class="info-container">
+          <div class="button-container">
+            <button class="button is-info btn-1" @click="startGame">
+              Play<span v-if="!currUser">&nbsp;as Guest</span>
+            </button>
+                  <div v-if="!currUser && !gameStarted" class="buttons user-info">
+            <button class="button is-info" @click="openLogin">Log In</button>
+            <button class="button is-info" @click="openSignUp">Sign Up</button>
+          </div>
+        </div>
+          <div v-if="currUser && !gameStarted" class="status-bar">
+            <div class="user">
+              <p>Hello {{currUser.username}}</p>
+            </div>
+          </div>
+      </div>
       </section>
     </transition>
 
@@ -64,17 +68,10 @@ export default {
   },
   methods: {
     openSignUp() {
-      // this.signUpShow = !this.signUpShow;
-      // if (this.loginShow) {
-      //   this.loginShow = false;
-      // }
       this.$router.push('/signup')
     },
     openLogin() {
-      this.loginShow = !this.loginShow;
-      if (this.signUpShow) {
-        this.signUpShow = false;
-      }
+      this.$router.push('/login')
     },
     loginUser(userObj) {
       this.$store.dispatch("loginUser", userObj);
@@ -92,17 +89,34 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 h1 {
   font-weight: bold;
   text-transform: uppercase;
 }
-.user-info {
-  padding: 0 1rem;
-  margin-top: 1rem;
-}
 .play-button{
   margin: 15px;
+}
+.button-container{
+  height: 40vh;
+  width: 60vw;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-1{
+  margin-right: 1%;
+}
+
+.status-bar{
+  margin: auto;
+}
+
+.info-container{
+  display: flex;
+  flex-direction: column;
 }
 
 </style>

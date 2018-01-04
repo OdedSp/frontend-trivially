@@ -47,7 +47,7 @@ export default {
     position: absolute;
     bottom: 0;
     width: 100vw;
-    height: calc(100vh - 7em);
+    height: calc(100vh - 9em);
     transition: opacity .3s;
     .bar {
         position: absolute;

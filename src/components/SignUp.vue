@@ -85,16 +85,13 @@ export default {
     uploadToCloudinary(file){
       console.log('sending to cloudinary')
     },
-    closeComp(){
-      this.$emit('closeComp')
-    },
     sendUser(){
       if (this.submitted) return
       this.submitted = true
       var user = {
         username: this.name,
         pass: this.password,
-        signup_email: this.email,
+        signup_email: this.mail,
         avatar: this.imageFile
       }
       this.$store.dispatch({ type: REGISTER_USER,user})

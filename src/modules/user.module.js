@@ -1,11 +1,12 @@
 import UserService from '../services/UserService'
 
 export const REGISTER_USER = 'user/REGISTER_USER'
+export const LOGIN_USER = 'user/LOGIN_USER'
+export const LOGOUT_USER = 'user/LOGOUT_USER'
 
 const state = {
     currUser: null,
     userIsLoggedIn: false
-    // currUser: {name: 'ninabombina'} // for testing purposes
 }
 
 const mutations = {
@@ -14,6 +15,10 @@ const mutations = {
     },
     setUserLoggedIn (state){
         state.userIsLoggedIn = true
+    },
+    setUserLogOut (state){
+        state.userIsLoggedIn = false
+        state.currUser = null
     }
 }
 
@@ -27,23 +32,28 @@ const actions = {
         })
         .catch (err => {
             console.log(err);
-            store.commit('setUser', {name: 'guest'})
+            store.commit('setUser', {username: 'guest'})
         })
     },
-    loginUser(store, userObj) {
-        return UserService.loginUser(userObj)
-        .then (user => {
-            store.commit('setUser', user)
+    [LOGIN_USER](store, { user }){
+        UserService.loginUser(user)
+        .then(( { data } ) => {
+            store.commit('setUser', data.user.value)
+            store.commit('setUserLoggedIn')
         })
         .catch (err => {
-            console.log(err);
-            store.commit('setUser', {name: 'guest'})
+            console.log(err)
+            store.commit('setUser', {username: 'guest'})
         })
+    },
+    [LOGOUT_USER](store){
+        console.log('logged out')
+        store.commit('setUserLogOut')
     }
 }
 
 const getters = {
-    currUser: state => {
+    currUser(state){
         return state.currUser
     },
     userIsLoggedIn(state){

@@ -21,35 +21,35 @@ const state = {
     userPts: 0,
     answerId: null,
     rivalAnswerId: null,
-    rivalPts: 0,
-    correctAnswerId: null,
-    answerTime: null,
     rivalAnswerTime: null,
+    rivalPts: 0,
+    answerTime: null,
+    correctAnswerId: null,
 
     userTotalPts: 0,
+
+    rival: null,
     rivalTotalPts: 0,
-    userName: null,
-    rivalName: null,
-    rivalAvatar: null,
     winner: null,
-
+    
     gameStartTime: null,
-
+    
     waitingForRival: false
-
+    
+    // userName: null,
 }
 const mutations = {
     SOCKET_WAITINGFORRIVAL(state) {
         state.waitingForRival = true
     },
     SOCKET_FIRSTROUND(state, { quest, rival, createdAt }) {
+        console.log({rival})
         state.roundReports = []
         state.waitingForRival = false
         state.userTotalPts = 0
         state.rivalTotalPts = 0
         state.gameStartTime = createdAt
-        // state.rivalName = rival.name // not in use at the moment
-        // state.rivalAvatar = rival.avatar // not in use at the moment
+        state.rival = rival
 
         resetRound(state, quest)
     },
@@ -86,15 +86,16 @@ const mutations = {
         }
         if (state.quest) pushRoundReport(state)
         state.quest = null
+        state.rival = null
         state.userTotalPts = 0
         state.rivalTotalPts = 0
         state.gameStartTime = null
     },
     [RIVAL_LEFT](state) {
         state.rivalTotalPts = 0
-        state.rivalName = null
-        state.rivalAvatar = null
+        state.rival = null
         state.quest = null
+        state.waitingForRival = false
     }
     // [ANSWER_TIME](state, { answerTime }) {
     //     state.answerTime = answerTime
@@ -107,7 +108,7 @@ const actions = {
         var game_time = state.gameStartTime
         commit(GAME_COMPLETED)
         var user = getters.currUser
-        if (!user || user.name.toLowerCase() === 'guest') return
+        if (!user || user.username.toLowerCase() === 'Myself') return
         var statObj = {
             username: user.name,
             game_results: {
@@ -141,6 +142,9 @@ const getters = {
             rivalAnswerId,
             rivalPts,
         }
+    },
+    rival(state) {
+        return state.rival
     },
     quest(state) {
         return state.quest

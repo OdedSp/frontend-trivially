@@ -1,29 +1,50 @@
 import axios from 'axios'
 import CloudinaryService from '../services/CloudinaryService'
 
-const REGISTER_USER_URL = 'http://localhost:3003/data/user'
+var REGISTER_USER_URL = '//localhost:3003/data/user'
+var LOGIN_USER_URL = '//localhost:3003/login'
+if (process.env.NODE_ENV !== 'development') {
+    REGISTER_USER_URL = '/data/user';
+    LOGIN_USER_URL = '/login';
+}
 
 function registerUser(user) {
     return new Promise ((resolve,reject) => {
-        CloudinaryService.upload(user.avatar)
-        .then((res) => {
-          user.avatar = res.data.secure_url
-          axios.post(REGISTER_USER_URL, user)
-          .then((res) => {
-              resolve(res)
-          })
-          .catch(err => {
-              reject(err)
-          })
-        })
-        .catch(err => console.log(err))
+        if (user.avatar){
+            CloudinaryService.upload(user.avatar)
+            .then((res) => {
+              user.avatar = res.data.secure_url
+              axios.post(REGISTER_USER_URL, user)
+              .then((res) => {
+                  resolve(res)
+              })
+              .catch(err => {
+                  reject(err)
+              })
+            })
+            .catch(err => console.log(err))
+        } else {
+            axios.post(REGISTER_USER_URL, user)
+            .then((res) => {
+                resolve(res)
+            })
+            .catch(err => {
+                reject(err)
+            })
+        }
     })
     
 }
 
-function loginUser(userObj) {
+function loginUser(user) {
     return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve(userObj) }, 300)
+        axios.post(LOGIN_USER_URL, user)
+        .then((res) => {
+            resolve(res)
+        })
+        .catch(err => {
+            reject(err)
+        })
     })
 }
 
