@@ -2,14 +2,14 @@
     <div class="trivia-scoreboard">
 
 <!-- TODO: make player-stats component to avoid all of this repetition -->
-        <div class="player myself">
+        <div v-if="user" class="player myself">
             <div class="static-info">
-                <h3 v-if="user">{{user.name}}</h3>
-                <!-- <img src="{{user.avatar}}" alt="user avatar"> -->
+                <h3>{{user.username}}</h3>
+                <img :src="user.avatar" alt="user avatar">
             </div>
             <div class="live-score">
                 <h2>
-                    {{totalPts.userTotal}}
+                    <span class="total-score">{{userPtsToDisplay}}</span>
                     <transition enter-active-class="animated flash"
                                 leave-active-class="animated fadeOut">
                         <span v-if="userRoundPts" class="round-score">  +{{userRoundPts}}</span>
@@ -20,18 +20,18 @@
 
         <div class="player rival">
             <div class="live-score">
-                <h2>
+                <h2 v-if="rival">
                     <transition enter-active-class="animated flash"
                                 leave-active-class="animated fadeOut">
                         <span v-if="rivalRoundPts" class="round-score">{{rivalRoundPts}}+  </span>
                     </transition>
-                    {{totalPts.rivalTotal}}
+                    <span class="total-score">{{rivalPtsToDisplay}}</span>
                 </h2>
             </div>
             <div class="static-info">
-                <h3>Rival</h3>
-                <!-- <h3>{{rival.name}}</h3> -->
-                <!-- <img src="{{rival.avatar}}" alt="user avatar"> -->
+                <h3 v-if="rival">{{rival.username}}</h3>
+                <h3 v-else>Waiting for opponent</h3>
+                <img v-if="rival" :src="rival.avatar" alt="rival avatar">
             </div>
         </div>
 
@@ -55,7 +55,9 @@ export default {
             userRoundPts: null,
             rivalRoundPts: null,
             userRoundPtsShown: false,
-            rivalRoundPtsShown: false
+            rivalRoundPtsShown: false,
+            userPtsToDisplay: 0,
+            rivalPtsToDisplay: 0
         }
     },
     watch: {
@@ -63,17 +65,27 @@ export default {
             if (!this.userRoundPtsShown && this.currRound.userPts) {
                 this.userRoundPtsShown = true
                 this.userRoundPts = this.currRound.userPts
+                this.incScore('userPtsToDisplay', this.currRound.userPts)
                 setTimeout(_=> this.userRoundPts = null, 2000)
             }
             if (!this.rivalRoundPtsShown && this.currRound.rivalPts) {
                 this.rivalRoundPtsShown = true
                 this.rivalRoundPts = this.currRound.rivalPts
+                this.incScore('rivalPtsToDisplay', this.currRound.rivalPts)
                 setTimeout(_=> this.rivalRoundPts = null, 2000)
             }
         },
         nextRound() {
             this.userRoundPtsShown = false
             this.rivalRoundPtsShown = false
+        }
+    },
+    methods: {
+        incScore(toInc, incBy) {
+            var interval = setInterval(_=> {
+                this[toInc]++
+                if (--incBy === 0) clearInterval(interval)
+            }, 10)
         }
     }
 }
@@ -89,6 +101,10 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        img {
+            width: 2.4em;
+            border-radius: 50%;
+        }
         div:not(:last-child) {
             margin-right: .5rem;
         }
@@ -97,9 +113,13 @@ export default {
         }
         .live-score {
             color: #00d7bb;
+            align-self: flex-end;
         }
         .round-score {
-            font-size: 80%;
+            font-size: 85%;
+        }
+        .total-score {
+            font-size: 1.6em;
         }
 
     }

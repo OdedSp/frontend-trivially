@@ -2,7 +2,7 @@
   <section>
 
     <transition>
-      <score-board :currRound="currRound" :user="currUser" :rival="false" :nextRound="showQuest">
+      <score-board :currRound="currRound" :user="currUser" :rival="rival" :nextRound="showQuest">
       </score-board>
     </transition>
 
@@ -64,7 +64,7 @@ export default {
   computed: {
     ...mapGetters([
       'currUser',
-      // 'rival',
+      'rival',
       'currRound',
       'quest',
       'correctAnswerId',
@@ -97,7 +97,7 @@ export default {
     startGame() {
       this.rivalLeft = false
       this.showRivalLeft = false
-      this.$socket.emit('joinGameRoom')
+      this.$socket.emit('joinGameRoom', { username: this.currUser.username, avatar: this.currUser.avatar, _id: this.currUser._id})
     },
     seeNextQuest() {
       this.countdown = false
@@ -129,11 +129,13 @@ export default {
       this.rivalLeft = true
       setTimeout(_=> this.showRivalLeft = true, 1000)
     })
-    if (!this.currUser) this.$store.commit("setUser", { name: 'Guest' }) // temporary (hopefully)
-    if (this.quest) {
-      this.showQuest = true
-      return
-    }
+    if (!this.currUser) this.$store.commit('setUser', { username: 'Guest',
+                                                        avatar: 'http://res.cloudinary.com/koolshooz/image/upload/v1515061041/avatar.png',
+                                                        _id: null  }) // temporary (hopefully)
+    // if (this.quest) {
+    //   this.showQuest = true
+    //   return
+    // }
     this.startGame()
   }
 };

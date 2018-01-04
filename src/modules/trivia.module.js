@@ -21,35 +21,35 @@ const state = {
     userPts: 0,
     answerId: null,
     rivalAnswerId: null,
-    rivalPts: 0,
-    correctAnswerId: null,
-    answerTime: null,
     rivalAnswerTime: null,
+    rivalPts: 0,
+    answerTime: null,
+    correctAnswerId: null,
 
     userTotalPts: 0,
+
+    rival: null,
     rivalTotalPts: 0,
-    userName: null,
-    rivalName: null,
-    rivalAvatar: null,
     winner: null,
-
+    
     gameStartTime: null,
-
+    
     waitingForRival: false
-
+    
+    // userName: null,
 }
 const mutations = {
     SOCKET_WAITINGFORRIVAL(state) {
         state.waitingForRival = true
     },
     SOCKET_FIRSTROUND(state, { quest, rival, createdAt }) {
+        console.log({rival})
         state.roundReports = []
         state.waitingForRival = false
         state.userTotalPts = 0
         state.rivalTotalPts = 0
         state.gameStartTime = createdAt
-        // state.rivalName = rival.name // not in use at the moment
-        // state.rivalAvatar = rival.avatar // not in use at the moment
+        state.rival = rival
 
         resetRound(state, quest)
     },
@@ -141,6 +141,9 @@ const getters = {
             rivalAnswerId,
             rivalPts,
         }
+    },
+    rival(state) {
+        return state.rival
     },
     quest(state) {
         return state.quest

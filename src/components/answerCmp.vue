@@ -15,10 +15,15 @@ export default {
         'rivalPickAndIncorrect',
         'wasAnswer'
     ],
+    data() {
+        return {
+            entranceAnimationOn: true
+        }
+    },
     computed: {
         answerClass() {
             return {
-                'animated flipInX': !this.answered,
+                'animated flipInX': !this.answered && this.entranceAnimationOn,
                 'correct userPick animated rubberBand': this.pickedAndCorrect,
                 'incorrect userPick animated shake': this.pickedAndIncorrect,
                 'correct rivalPick': this.rivalPickAndCorrect,
@@ -26,6 +31,9 @@ export default {
                 'correct animated pulse': this.wasAnswer
             }
         }
+    },
+    mounted() {
+        setTimeout(_=> this.entranceAnimationOn = false, 700)
     }
 }
 </script>
