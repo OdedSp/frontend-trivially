@@ -10,7 +10,7 @@
             :rivalPickAndIncorrect="questReport.rivalAnswerId === answer.id && !questReport.rivalPts"
             :wasAnswer="questReport.answerId !== answer.id && questReport.rivalAnswerId !== answer.id && questReport.correctAnswerId === answer.id">
         </answer-cmp>
-        {{questReport.answerTime/1000}}s
+        {{questReport.answerTime}}s
       </div>
   </div>
 </template>
@@ -20,8 +20,6 @@ import answerCmp from './answerCmp'
 
 export default {
   props: ['questReport'],
-  computed: {},
-  methods: {},
   components: {
     answerCmp
   }

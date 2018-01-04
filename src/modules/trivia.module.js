@@ -202,7 +202,7 @@ function resetRound(state, quest=null) {
     state.answerTime = null
     state.userPts = 0
     state.rivalAnswerId = null
-    state.rivalAnswerTime = 0
+    state.rivalAnswerTime = null
     state.rivalPts = 0
     state.correctAnswerId = null
 }

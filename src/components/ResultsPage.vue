@@ -92,10 +92,15 @@ export default {
 .white {
   color: whitesmoke
 }
+
+.result {
+  height: calc(100vh - 63px);
+}
+
 .resultPage{
   width: 100%;
   height: 30px;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   margin-bottom: 0

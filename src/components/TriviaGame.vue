@@ -32,7 +32,8 @@
       </div>
     </transition>
 
-    <time-left-bar v-if="timeToAnswer !== null" :timeToAnswer="timeToAnswer"></time-left-bar>
+    <time-left-bar v-if="timeToAnswer !== null" :timeToAnswer="timeToAnswer"
+            :playerAnswerTime="playerAnswerTime" :rivalAnswerTime="rivalAnswerTime"></time-left-bar>
     
     
   </section>
@@ -68,7 +69,13 @@ export default {
       'quest',
       'correctAnswerId',
       'waitingForRival'
-    ])
+    ]),
+    rivalAnswerTime() {
+      return this.$store.state.triviaModule.rivalAnswerTime
+    },
+    playerAnswerTime() {
+      return this.$store.state.triviaModule.answerTime
+    }
   },
   watch: {
     quest() {

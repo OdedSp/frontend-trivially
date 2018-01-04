@@ -4,8 +4,13 @@
        @click="closeReview">Close questions ↑</button>
     <!-- <transition enter-active-class="animated fadeInRightBig" leave-active-class="animated fadeOutLeftBig"> -->
     <div class="report-wrapper">
-      <transition :name="direction" mode="out-in">
-        <quest-report v-for="(quest, i) in report" :key="i" :questReport="quest" v-if="currQuestReportIdx===i"/>
+      <transition :name="direction">
+        <div class="report" v-for="(round, i) in report" :key="i" v-if="currQuestReportIdx===i">
+          <quest-report :questReport="round"/>
+          <time-left-bar :timeToAnswer="10"
+          :playerAnswerTime="round.answerTime || 10"
+          :rivalAnswerTime="round.rivalAnswerTime || 10" />
+        </div>
       </transition>
       <div class="flip">
         <a class="pagination pagination-previous" @click="flipBack">⪦</a>
@@ -17,6 +22,7 @@
 
 <script>
 import QuestReport from "./QuestReport";
+import timeLeftBar from './timeLeftBar';
 
 export default {
   data() {
@@ -66,7 +72,8 @@ export default {
     }
   },
   components: {
-    QuestReport
+    QuestReport,
+    timeLeftBar
   }
 }
 </script>
@@ -74,17 +81,26 @@ export default {
 <style lang="scss" scoped>
 
 .report-wrapper {
-  // height: calc(100vh - 90px);
+  position: relative;
+  height: calc(100vh - 99px);
+  // border: 1px solid gold;
   // display: flex;
   // flex-direction: column;
   // justify-content: space-between;
   // align-items: center;
+  .report {
+    position: absolute;
+    height: 100%;
+  }
   .flip {
     position: absolute;
     display: flex;
     justify-content: center;
     width: 100vw;
     bottom: 5vh;
+    a {
+      flex-grow: 0;
+    }
   }
 }
 .report-button {
@@ -97,7 +113,8 @@ export default {
 }
 
 .next-leave-active, .next-enter-active, .back-leave-active, .back-enter-active {
-  transition: all .5s ease;
+  position: absolute;
+  transition: all 1s ease;
 }
 
 .next-leave-to {
