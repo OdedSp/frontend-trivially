@@ -86,15 +86,16 @@ const mutations = {
         }
         if (state.quest) pushRoundReport(state)
         state.quest = null
+        state.rival = null
         state.userTotalPts = 0
         state.rivalTotalPts = 0
         state.gameStartTime = null
     },
     [RIVAL_LEFT](state) {
         state.rivalTotalPts = 0
-        state.rivalName = null
-        state.rivalAvatar = null
+        state.rival = null
         state.quest = null
+        state.waitingForRival = false
     }
     // [ANSWER_TIME](state, { answerTime }) {
     //     state.answerTime = answerTime
@@ -107,7 +108,7 @@ const actions = {
         var game_time = state.gameStartTime
         commit(GAME_COMPLETED)
         var user = getters.currUser
-        if (!user || user.name.toLowerCase() === 'guest') return
+        if (!user || user.username.toLowerCase() === 'Myself') return
         var statObj = {
             username: user.name,
             game_results: {

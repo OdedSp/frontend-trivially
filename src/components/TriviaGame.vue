@@ -2,7 +2,8 @@
   <section>
 
     <transition>
-      <score-board :currRound="currRound" :user="currUser" :rival="rival" :nextRound="showQuest">
+      <score-board :currRound="currRound" :user="currUser" :waitingForRival="waitingForRival"
+                   :rival="rival" :nextRound="showQuest">
       </score-board>
     </transition>
 
@@ -90,6 +91,7 @@ export default {
   },
   methods: {
     questAnswered(answerId, answerTime) {
+      if (this.answered) return
       this.answered = true
       this.$socket.emit('playerAnswer', { answerId, answerTime })
       // this.$store.commit({type: ANSWER_TIME, answerTime})
@@ -129,7 +131,7 @@ export default {
       this.rivalLeft = true
       setTimeout(_=> this.showRivalLeft = true, 1000)
     })
-    if (!this.currUser) this.$store.commit('setUser', { username: 'Guest',
+    if (!this.currUser) this.$store.commit('setUser', { username: 'Myself',
                                                         avatar: 'http://res.cloudinary.com/koolshooz/image/upload/v1515061041/avatar.png',
                                                         _id: null  }) // temporary (hopefully)
     // if (this.quest) {
@@ -137,6 +139,9 @@ export default {
     //   return
     // }
     this.startGame()
+  },
+  destroyed() {
+    this.$socket.emit('leftGame')
   }
 };
 </script>

@@ -7,7 +7,7 @@
           :class="{
               'is-primary': result.winner==='user',
               'is-danger': result.winner==='rival'}">
-              <p v-html="users" class="name"></p>
+              <p class="name">{{username}}</p>
               <p class="score" v-html="result.userPts"></p>
           </article>
           <article class="rival notification"
@@ -65,10 +65,10 @@ export default {
     result() {
       return this.$store.getters.result;
     },
-    users() {
+    username() {
         //temporarily like this, ultimately supposed to return names of both users, avatars and maybe other things
         var user = this.$store.getters.currUser;
-        return user.name
+        return user.username
     }
   },
   methods: {

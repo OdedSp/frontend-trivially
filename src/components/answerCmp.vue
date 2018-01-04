@@ -33,6 +33,7 @@ export default {
         }
     },
     mounted() {
+        if (this.answered === undefined) return
         setTimeout(_=> this.entranceAnimationOn = false, 700)
     }
 }

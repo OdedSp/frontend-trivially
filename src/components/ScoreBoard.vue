@@ -30,7 +30,8 @@
             </div>
             <div class="static-info">
                 <h3 v-if="rival">{{rival.username}}</h3>
-                <h3 v-else>Waiting for opponent</h3>
+                <h3 v-else-if="waitingForRival">Waiting for opponent</h3>
+                <h3 v-else>No opponent</h3>
                 <img v-if="rival" :src="rival.avatar" alt="rival avatar">
             </div>
         </div>
@@ -44,7 +45,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-    props: ['user', 'rival', 'currRound', 'nextRound'],
+    props: ['user', 'rival', 'waitingForRival', 'currRound', 'nextRound'],
     computed: {
         ...mapGetters([
             'totalPts'
