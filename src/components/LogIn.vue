@@ -1,48 +1,73 @@
 <template>
   <div>
-      <form @submit.prevent="sendUser">
-        <p class="control has-icon has-icon-right">
-          <input v-model="name" name="name" v-validate="'required|alpha'" data-vv-delay="500" :class="{'input': true, 'is-danger': errors.has('name') }"
-            type="text" placeholder="Name" required>
-          <i v-show="errors.has('name')" class="fa fa-warning"></i>
-          <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
-        </p>
-        <p class="control has-icon has-icon-right">
-          <input v-model="password" type="password" name="password" v-validate="'required'" data-vv-delay="1000"
-          :class="{'input': true, 'is-danger': errors.has('password') }" placeholder="Password" required>
-          <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
-        </p>
-        <div class="buttons">
-          <button class="button is-light" @submit="sendUser">✓</button>
-          <button class="button is-dark" @click="closeComp">X</button>
-        </div>
-      </form>
+    <div class="login-page-container">
+      <h1 class="title is-1">Login</h1>
+        <form @submit.prevent="sendUser">
+          <p class="control has-icon has-icon-right">
+            <input v-model="name" name="name" v-validate="'required|alpha'" data-vv-delay="500" :class="{'input': true, 'is-danger': errors.has('name') }"
+              type="text" placeholder="Name" required>
+            <i v-show="errors.has('name')" class="fa fa-warning"></i>
+            <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
+          </p>
+          <p class="control has-icon has-icon-right">
+            <input v-model="password" type="password" name="password" v-validate="'required'" data-vv-delay="1000"
+            :class="{'input': true, 'is-danger': errors.has('password') }" placeholder="Password" required>
+            <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
+          </p>
+          <div class="buttons">
+            <button class="button is-light" @submit="sendUser">Submit</button>
+          </div>
+        </form>
+    </div>
     </div>
 </template>
 
 <script>
+import { LOGIN_USER } from '../modules/user.module'
+import { mapGetters } from 'vuex'
+
+
 export default {
   data() {
     return {
-      name: "",
-      password: ""
+      name: '',
+      password: ''
     };
   },
   methods: {
-    closeComp() {
-      this.$emit("closeComp");
-    },
     sendUser() {
-      var userObj = {
-        name: this.name,
-        password: this.password
-      };
-      this.$emit("loginUser", userObj);
+      var user = {
+        username: this.name,
+        pass: this.password
+      }
+      this.$store.dispatch({ type: LOGIN_USER,user})
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'userIsLoggedIn',
+    ]),
+    loading(){
+      return this.submitted && !this.userIsLoggedIn
+    },
+    doneLogin(){
+      return this.userIsLoggedIn
+    }
+  },
+  watch: {
+    doneLogin(val){
+      if (val) this.$router.push('/profile')
     }
   }
 };
 </script>
 
 <style>
-
+  .login-page-container{
+    width:60%;
+    margin: auto;
+  }
+  .title {
+    color: #6db8d2;
+  }
 </style>
