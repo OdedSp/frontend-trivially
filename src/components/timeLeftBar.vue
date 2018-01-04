@@ -54,7 +54,6 @@ export default {
         bottom: 0;
         width: .7em;
         transition: height 1s linear;
-        // transition-timing-function: linear;
     }
     .player {
         left: 0;
