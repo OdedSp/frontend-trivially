@@ -27,8 +27,11 @@
         </span>
       </p> -->
     <button class="button is-warning is-bold" @click="playAgain">Play again?</button>
-    <button class="button is-warning toggle resultPage"
-       @click="review">View questions ↓</button>
+    <button class="button is-warning toggle results-button"
+       @click="review">
+       <div class="fake-button">View questions <span><icon name="long-arrow-down" scale="1.2" /></span></div>
+       <!-- <div class="icon"><icon name="eye" scale="1.2" /></div> -->
+    </button>
   </section>
 </template>
 
@@ -68,7 +71,7 @@ export default {
     username() {
         //temporarily like this, ultimately supposed to return names of both users, avatars and maybe other things
         var user = this.$store.getters.currUser;
-        return user.username
+        if (user) return user.username
     }
   },
   methods: {
@@ -97,13 +100,40 @@ export default {
   height: calc(100vh - 63px);
 }
 
-.resultPage{
-  width: 100%;
-  height: 30px;
+// .result-button{
+//   width: 100%;
+//   height: 30px;
+//   position: absolute;
+//   bottom: 0;
+//   left: 0;
+//   margin-bottom: 0
+// }
+.results-button {
+  color: var(--main-bg-color);
+  background-color: #1e1e1e;
+  // margin: 0;
+  padding: 8px;
   position: absolute;
   bottom: 0;
   left: 0;
-  margin-bottom: 0
+  // padding-bottom: 30px;
+  width: 100%;
+  height: 52px;
+  // height: 30px;
+  border-radius: 0;
+  &:hover {
+    background-color: #1e1e1e;
+  }
+  .fake-button {
+    padding: 4px 8px;
+    border-radius: 5px;
+    background-color: #ffe261;
+    box-shadow: -1px 1px 3px 0px orange;
+    span {
+      position: relative;
+      top: 4px;
+    }
+  }
 }
 
 .players{

@@ -86,7 +86,7 @@ export default {
         border-style: none;
         padding: 10px;
         margin: 15px;
-        background-color: lightblue;
+        background-color: var(--answer-color);
         border-radius: 5px;
         box-shadow: 0 0 4px gray;
         &.correct {

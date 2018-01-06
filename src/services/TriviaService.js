@@ -1,4 +1,3 @@
-import mockData from './mockData.json'
 import ioClient from 'socket.io-client'
 
 var socket;

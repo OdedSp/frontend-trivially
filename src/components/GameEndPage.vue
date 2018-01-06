@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     direction() {
-      return (this.showReport) ? 'down' : 'up'
+      return (!this.showReport) ? 'down' : 'up'
     }
   },
   methods: {
@@ -41,6 +41,9 @@ export default {
   components: {
     ReportPage,
     ResultsPage
+  },
+  created() {
+    if (!this.$store.getters.report[0]) this.$router.push('/')
   }
 };
 </script>
@@ -58,11 +61,11 @@ export default {
 }
 
 .down-enter, .up-leave-to {
-  transform: translateY(-110vh)
+  transform: translateY(calc(-100vh + 104px));
 }
 
 .down-leave-to, .up-enter {
-  transform: translateY(110vh)
+  transform: translateY(calc(100vh - 104px))
 }
 
 </style>

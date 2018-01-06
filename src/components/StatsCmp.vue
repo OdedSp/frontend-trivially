@@ -1,14 +1,24 @@
 <template>
 <div class="stats">
-    <div class="c100 small" :class="'p'+(questReport.userPts)">
-        <span>{{questReport.userPts}} p</span>
+    <div class="c100 small player" :class="'p'+(questReport.userPts)">
+        <span>{{questReport.userPts}}p</span>
         <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
         </div>
     </div>
-    
-    <div class="c100 small green" :class="'p'+(questReport.percentage)">
+
+    <div class="c100 small player"
+    :class="questReport.answerTime? 'p'+(10-questReport.answerTime)*10 : 'p0'">
+        <span v-if="questReport.answerTime">{{questReport.answerTime}}s </span>
+        <span v-else>n/a</span>
+        <div class="slice">
+            <div class="bar"></div>
+            <div class="fill"></div>
+        </div>
+    </div>
+
+    <div class="c100 small correct" :class="'p'+(questReport.percentage)">
         <span>{{questReport.percentage}}%</span>
         <div class="slice">
             <div class="bar"></div>
@@ -16,15 +26,7 @@
         </div>
     </div>
 
-    <div class="c100 small dark orange" :class="'p'+(10-questReport.answerTime)*10">
-        <span>{{questReport.answerTime}}s </span>
-        <div class="slice">
-            <div class="bar"></div>
-            <div class="fill"></div>
-        </div>
-    </div>
-
-    <div class="c100 small dark" :class="'p'+(questReport.rivalPts)">
+    <div class="c100 small rival" :class="'p'+(questReport.rivalPts)">
         <span>{{questReport.rivalPts}}p</span>
         <div class="slice">
             <div class="bar"></div>
@@ -43,14 +45,62 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../assets/circle.css';
+// @import '../assets/circle.css';
 
 .stats {
     margin: 15px;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
-    width: 85%
+    width: 85%;
+}
+
+.c100 {
+    background-color: #464646;
+    // background-color: var(--answer-color);
+    &.small {
+        font-size: 50px;
+    }
+    &::after {
+        background-color: var(--main-bg-color);
+        // background-color: var(--answer-color);
+    }
+    > span {
+        font-size: 0.25em;
+        width: 4em;
+        line-height: 4em;
+        color: #7fa2ad;
+    }
+    &.rival {
+        .slice .bar, .slice .fill {
+            border-color: var(--rival-color);
+        }
+        &:hover > span {
+            color: var(--rival-color);
+        }
+    }
+    &.player {
+        .slice .bar, .slice .fill {
+            border-color: var(--player-color);
+        }
+        &:hover > span {
+            color: var(--player-color);
+        }
+    }
+    &.correct {
+        .slice .bar, .slice .fill {
+            border-color: var(--correct-color);
+        }
+        &:hover > span {
+            color: var(--correct-color);
+        }
+    }
+    &:hover > span {
+        font-size: .35em;
+        width: 2.9em;
+        line-height: 2.9em;
+        font-weight: 600;
+    }
 }
 
 // .circle {

@@ -131,7 +131,7 @@ export default {
       this.rivalLeft = true
       setTimeout(_=> this.showRivalLeft = true, 1000)
     })
-    if (!this.currUser) this.$store.commit('setUser', { username: 'Myself',
+    if (!this.currUser) this.$store.commit('setUser', { username: 'Me',
                                                         avatar: 'http://res.cloudinary.com/koolshooz/image/upload/v1515061041/avatar.png',
                                                         _id: null  }) // temporary (hopefully)
     // if (this.quest) {

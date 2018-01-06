@@ -108,7 +108,7 @@ const actions = {
         var game_time = state.gameStartTime
         commit(GAME_COMPLETED)
         var user = getters.currUser
-        if (!user || user.username.toLowerCase() === 'Myself') return
+        if (!user || user.username.toLowerCase() === 'me') return
         var statObj = {
             username: user.name,
             game_results: {

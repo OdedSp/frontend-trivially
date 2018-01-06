@@ -1,7 +1,11 @@
 <template>
   <div class="report-page">
     <button class="button is-warning toggle report-button"
-       @click="closeReview">Close questions ↑</button>
+       @click="closeReview">
+        <div class="fake-button">Close questions 
+          <span><icon name="long-arrow-up" scale="1.2" /></span></div>
+        
+    </button>
     <!-- <transition enter-active-class="animated fadeInRightBig" leave-active-class="animated fadeOutLeftBig"> -->
     <div class="report-wrapper">
       <transition :name="direction">
@@ -13,15 +17,19 @@
         </div>
       </transition>
       <div class="flip">
-        <button class="pagination pagination-previous button is-link" @click="flipBack">⪦</button>
-        <button class="pagination pagination-next button is-link" @click="flipNext">⪧</button>
+        <button class="pagination pagination-previous button is-link" @click="flipBack">
+          <icon name="arrow-left" />
+        </button>
+        <button class="pagination pagination-next button is-link" @click="flipNext">
+          <icon name="arrow-right" />
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import QuestReport from "./QuestReport";
+import QuestReport from './QuestReport';
 import timeLeftBar from './timeLeftBar';
 
 export default {
@@ -97,19 +105,51 @@ export default {
     display: flex;
     justify-content: center;
     width: 100vw;
-    bottom: 5vh;
+    bottom: 1em;;
     button {
       flex-grow: 0;
     }
   }
 }
 .report-button {
-  margin: 0;
+  // color: var(--main-bg-color);
+  // margin: 0;
+  // position: relative;
+  // top: -10px;
+  // // padding-bottom: 30px;
+  // width: 100%;
+  // // height: 30px;
+  // border-radius: 0;
+  // .icon {
+  //   position: absolute;
+  //   right: 1em;
+  //   top: 5px;
+  // }
+  color: var(--main-bg-color);
+  background-color: #1e1e1e;
+  // margin: 0;
+  padding: 8px;
   position: relative;
   top: -10px;
-  padding-bottom: 30px;
+  // padding-bottom: 30px;
   width: 100%;
-  height: 30px
+  height: 52px;
+  // min-height: 2.25em;
+  // height: 30px;
+  border-radius: 0;
+  &:hover {
+    background-color: #1e1e1e;
+  }
+  .fake-button {
+    padding: 4px 8px;
+    border-radius: 5px;
+    background-color: #ffe261;
+    box-shadow: -1px 1px 3px 0px orange;
+    span {
+      position: relative;
+      top: 4px;
+    }
+  }
 }
 
 .next-leave-active, .next-enter-active, .back-leave-active, .back-enter-active {
@@ -118,19 +158,22 @@ export default {
 }
 
 .next-leave-to {
-  transform: translateX(110%)
+  transform: translateX(-110%)
 }
 
 .next-enter {
-  transform: translateX(-110%)
-}
-
-.back-leave-to {
-  transform: translateX(-110%)
-}
-
-.back-enter {
   transform: translateX(110%)
 }
 
+.back-leave-to {
+  transform: translateX(110%)
+}
+
+.back-enter {
+  transform: translateX(-110%)
+}
+
+.pagination {
+  color: var(--answer-color);
+}
 </style>
