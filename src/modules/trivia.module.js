@@ -108,13 +108,13 @@ const actions = {
         var game_time = state.gameStartTime
         commit(GAME_COMPLETED)
         var user = getters.currUser
-        if (!user || user.username.toLowerCase() === 'me') return
+        if (!user || !user._id) return
         var statObj = {
-            username: user.name,
+            userId: user._id,
             game_results: {
                 game_time,
                 win,
-                totalQuestions: state.roundReports.length,
+                total_questions: state.roundReports.length,
                 correct_questions: state.roundReports.filter(({ userPts }) => !!userPts).length
             } 
         }
