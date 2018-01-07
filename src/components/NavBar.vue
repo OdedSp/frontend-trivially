@@ -5,9 +5,9 @@
             <img src="../imgs/logo-small.png" />
           </router-link>
         </div>
-        <div v-if="userIsLoggedIn" class="user-logout">
+        <!-- <div v-if="userIsLoggedIn" class="user-logout">
           <button @click="logout" class="button is-info">Logout</button>
-        </div>
+        </div> -->
     </nav>
 </template>
 

@@ -16,7 +16,6 @@
         </answer-cmp>
 
       </div>
-      <!-- currRound.answerIdx === i && currRound.userPts -->
   </div>
 </template>
 
@@ -77,7 +76,7 @@ export default {
     h2.question {
         // flex-grow: 1;
         font-weight: bold;
-        font-size: 110%;
+        font-size: 120%;
         padding: 10px;
     }
     .question-img {
