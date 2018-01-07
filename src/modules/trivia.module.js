@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import TriviaService from '../services/TriviaService'
-import EventBus, { RIGHT_ANSWER, RIVAL_DISCONNECTED } from '../services/BusService'
+import EventBus, { RIGHT_ANSWER, RIVAL_DISCONNECTED, GAME_WON } from '../services/BusService'
 
 export const ROUND_START_TIME = 'trivia/setRoundStartTime'
 export const GAME_COMPLETED = 'trivia/handleGameCompleted'
@@ -51,11 +51,13 @@ const mutations = {
         state.gameStartTime = createdAt
         state.rival = rival
 
-        resetRound(state, quest)
+        TriviaService.shuffleAnswers(quest.answers)
+        TriviaService.resetRound(state, quest)
     },
     SOCKET_NEXTROUND(state, quest) {
-        pushRoundReport(state)
-        resetRound(state, quest)
+        TriviaService.pushRoundReport(state)
+        TriviaService.shuffleAnswers(quest.answers)
+        TriviaService.resetRound(state, quest)
     },
     SOCKET_ANSWERPROCESSED(state, { answerId, points, answerTime }) {
         state.userPts = points
@@ -79,12 +81,13 @@ const mutations = {
     [GAME_COMPLETED](state) {
         if (state.userTotalPts > state.rivalTotalPts) {
             state.winner = 'user'
+            EventBus.$emit(GAME_WON)
         } else if (state.userTotalPts < state.rivalTotalPts) {
             state.winner = 'rival'
         } else {
             state.winner = 'draw'
         }
-        if (state.quest) pushRoundReport(state)
+        if (state.quest) TriviaService.pushRoundReport(state)
         state.quest = null
         state.rival = null
         state.userTotalPts = 0
@@ -184,43 +187,6 @@ const getters = {
             rivalPts: totalRivalPts
         }
     }
-}
-
-function pushRoundReport(state) {
-    state.roundReports.push({
-        quest: state.quest,
-        answerId: state.answerId,
-        answerTime: state.answerTime,
-        userPts: state.userPts,
-        rivalAnswerId: state.rivalAnswerId,
-        rivalAnswerTime: state.rivalAnswerTime,
-        rivalPts: state.rivalPts,
-        correctAnswerId: state.correctAnswerId,
-        percentage: calculatePercentage(state)
-    })
-}
-
-function calculatePercentage(state) {
-    let nom = state.quest.answeredCorrectlyCount
-    let denom = state.quest.answeredCorrectlyCount+state.quest.answeredIncorrectlyCount+2
-    if (state.userPts && state.rivalPts) {
-        nom += 2
-    } else if (!state.userPts && state.rivalPts || state.userPts && !state.rivalPts) {
-        nom++
-    } 
-    return Math.round(nom/denom*100)
-}
-
-function resetRound(state, quest=null) {
-    state.quest = quest
-    state.roundStartTime = null
-    state.answerId = null
-    state.answerTime = null
-    state.userPts = 0
-    state.rivalAnswerId = null
-    state.rivalAnswerTime = null
-    state.rivalPts = 0
-    state.correctAnswerId = null
 }
 
 export default {

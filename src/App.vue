@@ -18,7 +18,7 @@
 <script>
 import navBar from './components/NavBar'
 
-import EventBus, {RIGHT_ANSWER} from './services/BusService'
+import EventBus, { RIGHT_ANSWER, GAME_WON } from './services/BusService'
 
 export default {
   name: 'app',
@@ -29,9 +29,9 @@ export default {
     }
   },
   methods: {
-    turnOnPyro() {
+    turnOnPyro(delay) {
       this.showPyro = true
-      setTimeout(_=> this.showPyro = false, 2000)
+      setTimeout(_=> this.showPyro = false, delay)
     }
   },
   watch: {
@@ -45,7 +45,8 @@ export default {
   },
   created() {
     if (this.$route.name !== 'HomePage') this.showNav = true
-    EventBus.$on(RIGHT_ANSWER, this.turnOnPyro)
+    EventBus.$on(RIGHT_ANSWER, _=> this.turnOnPyro(2000))
+    EventBus.$on(GAME_WON, _=> this.turnOnPyro(6010))
   }
 }
 </script>

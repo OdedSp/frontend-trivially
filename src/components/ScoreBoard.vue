@@ -100,7 +100,7 @@ export default {
 .trivia-scoreboard {
     display: flex;
     justify-content: space-between;
-    margin: 1rem;
+    margin: 10px 1rem;
     .player {
         font-size: 1.3em;
         display: flex;

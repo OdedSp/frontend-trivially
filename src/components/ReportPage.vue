@@ -97,7 +97,7 @@ export default {
   // justify-content: space-between;
   // align-items: center;
   .report {
-    position: absolute;
+    // position: absolute;
     height: 100%;
   }
   .flip {
@@ -175,5 +175,8 @@ export default {
 
 .pagination {
   color: var(--answer-color);
+  &:hover {
+    color: var(--answer-color);
+  }
 }
 </style>

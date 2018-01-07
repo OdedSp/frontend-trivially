@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="trivia-game">
 
     <transition>
       <score-board :currRound="currRound" :user="currUser" :waitingForRival="waitingForRival"
@@ -148,6 +148,23 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+
+.trivia-game {
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-between;
+  height: calc(100vh - 62px);
+  // .question-wrapper {
+  //   flex-grow: 1;
+  //   display: flex;
+  //   flex-direction: column;
+  //   .answer-wrapper {
+  //     flex-grow: 1;
+  //     display: flex;
+  //   }
+  // }
+}
+
   h2.rival-left {
     font-size: 1.3em;
     margin: 1.3em auto;

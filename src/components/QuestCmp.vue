@@ -1,6 +1,8 @@
 <template>
   <div class="question-wrapper">
       <h2 v-html="quest.txt" class="question animated slideInDown"></h2>
+      <img v-ifi="quest.img" class="question-img" :src="quest.img" />
+      <!-- <img class="question-img" src="../../imgs/quests/magic-the-gathering.jpg" /> -->
       <div class="answer-wrapper">
         <answer-cmp v-for="answer in quest.answers" :key="answer.id"
             @click.native="answerPicked(answer.id)"
@@ -67,16 +69,30 @@ export default {
 
 .question-wrapper {
     width: 95vw;
-    margin: auto;
-    h2 {
-        font-weight: bold
+    margin: 0 auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    h2.question {
+        // flex-grow: 1;
+        font-weight: bold;
+        font-size: 110%;
+        padding: 10px;
+    }
+    .question-img {
+        max-width: 60%;
+        margin: auto;
+        border-radius: 4px;
     }
 }
 
 .answer-wrapper {
+    flex-grow: 1;
     margin: auto;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     width: 85%;
     .answer {
         // width: 100%;
@@ -85,7 +101,7 @@ export default {
         outline: none;
         border-style: none;
         padding: 10px;
-        margin: 15px;
+        margin-bottom: 10px;
         background-color: var(--answer-color);
         border-radius: 5px;
         box-shadow: 0 0 4px gray;

@@ -45,6 +45,7 @@ export default {
 
 .answer-time-left {
     position: absolute;
+    z-index: 0;
     bottom: 0;
     width: 100vw;
     height: calc(100vh - 9em);
