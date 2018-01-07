@@ -105,7 +105,7 @@ export default {
     display: flex;
     justify-content: center;
     width: 100vw;
-    bottom: 1em;;
+    bottom: 2em;
     button {
       flex-grow: 0;
     }
