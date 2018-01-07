@@ -1,7 +1,7 @@
 <template>
   <div class="question-wrapper">
       <h2 v-html="quest.txt" class="question animated slideInDown"></h2>
-      <img v-ifi="quest.img" class="question-img" :src="quest.img" />
+      <img v-if="quest.img" class="question-img" :src="quest.img" />
       <!-- <img class="question-img" src="../../imgs/quests/magic-the-gathering.jpg" /> -->
       <div class="answer-wrapper">
         <answer-cmp v-for="answer in quest.answers" :key="answer.id"
