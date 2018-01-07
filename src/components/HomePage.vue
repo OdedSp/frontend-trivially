@@ -1,19 +1,22 @@
 <template>
   <div>
+    <div v-if="!currUser && !gameStarted" class="buttons user-info">
+      <button class="button is-success" @click="openLogin">Log In</button>
+      <button class="button is-success" @click="openSignUp">Sign Up</button>
+    </div>
+    <div v-if="currUser && !gameStarted" class="status-bar">
+      <div class="user">
+        <p>Hello {{currUser.username}}</p>
+      </div>
+    </div>
     <transition leave-active-class="animated zoomOut">
-    </transition>
-    <transition leave-active-class="animated zoomOut">
-      <!-- <section class="game-start" v-if="!quest"> -->
       <section class="game-start" v-if="!gameStarted">
         <section class="hero is-link is-bold">
           <div class="hero-body">
             <div class="container">
               <h1 class="title">
-                trivial travesty!
+                T<span>riv</span>Y<span>ou</span>
               </h1>
-              <h2 class="subtitle">
-                A titillating trivia tournament that'll turn timid twits to talented thinkers!
-              </h2>
             </div>
           </div>
         </section>
@@ -22,17 +25,8 @@
             <button class="button is-info btn-1" @click="startGame">
               Play<span v-if="!currUser">&nbsp;as Guest</span>
             </button>
-                  <div v-if="!currUser && !gameStarted" class="buttons user-info">
-            <button class="button is-info" @click="openLogin">Log In</button>
-            <button class="button is-info" @click="openSignUp">Sign Up</button>
           </div>
         </div>
-          <div v-if="currUser && !gameStarted" class="status-bar">
-            <div class="user">
-              <p>Hello {{currUser.username}}</p>
-            </div>
-          </div>
-      </div>
       </section>
     </transition>
 
@@ -92,7 +86,9 @@ export default {
 <style lang="scss" scoped>
 h1 {
   font-weight: bold;
-  text-transform: uppercase;
+  span {
+    color: black;
+  }
 }
 .play-button{
   margin: 15px;
@@ -112,11 +108,16 @@ h1 {
 
 .status-bar{
   margin: auto;
+  margin: 10px;
 }
 
 .info-container{
   display: flex;
   flex-direction: column;
+}
+
+.buttons {
+  margin: 10px
 }
 
 </style>
