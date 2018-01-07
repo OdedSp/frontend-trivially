@@ -134,10 +134,10 @@ export default {
       position: relative;
       top: 4px;
     }
-.playAgain {
-  margin: 15px;
-}
   }
+}
+.playAgain {
+  margin: 40px;
 }
 
 .players{
