@@ -6,14 +6,16 @@
           <article class="user notification" 
           :class="{
               'is-primary': result.winner==='user',
-              'is-danger': result.winner==='rival'}">
+              'is-danger': result.winner==='rival',
+              'is-info': result.winner==='draw'}">
               <p class="name">{{username}}</p>
               <p class="score" v-html="result.userPts"></p>
           </article>
           <article class="rival notification"
           :class="{
               'is-primary': result.winner==='rival',
-              'is-danger': result.winner==='user'}">
+              'is-danger': result.winner==='user',
+              'is-info': result.winner==='draw'}">
               <p class="name">Rival</p>
               <p class="score" v-html="result.rivalPts"></p>
           </article>
@@ -26,11 +28,10 @@
           {{result.rivalPts}}
         </span>
       </p> -->
-    <button class="button is-warning is-bold" @click="playAgain">Play again?</button>
+    <button class="button is-warning is-bold playAgain" @click="playAgain">Play again?</button>
     <button class="button is-warning toggle results-button"
        @click="review">
        <div class="fake-button">View questions <span><icon name="long-arrow-down" scale="1.2" /></span></div>
-       <!-- <div class="icon"><icon name="eye" scale="1.2" /></div> -->
     </button>
   </section>
 </template>
@@ -133,6 +134,9 @@ export default {
       position: relative;
       top: 4px;
     }
+.playAgain {
+  margin: 15px;
+}
   }
 }
 
