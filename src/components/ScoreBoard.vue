@@ -3,37 +3,41 @@
 
 <!-- TODO: make player-stats component to avoid all of this repetition -->
         <div v-if="user" class="player myself">
-            <div class="static-info user">
+            <div class="username animated fadeIn">
                 <h3>{{user.username}}</h3>
+            </div>
+            <div class="avatar-and-score myself">
                 <div class="player-img">
                     <img :src="user.avatar" alt="user avatar">
                 </div>
-            </div>
-            <div class="live-score">
-                <h2>
-                    <span class="total-score">{{userPtsToDisplay}}</span>
-                    <transition enter-active-class="animated flash"
-                                leave-active-class="animated fadeOut">
-                        <span v-if="userRoundPts" class="round-score">  +{{userRoundPts}}</span>
-                    </transition>
-                </h2>
+                <div class="live-score animated fadeIn">
+                    <h2>
+                        <span class="total-score">{{userPtsToDisplay}}</span>
+                        <transition enter-active-class="animated flash"
+                                    leave-active-class="animated fadeOut">
+                            <span v-if="userRoundPts" class="round-score">  +{{userRoundPts}}</span>
+                        </transition>
+                    </h2>
+                </div>
             </div>
         </div>
 
         <div class="player rival">
-            <div class="live-score">
-                <h2 v-if="rival">
-                    <transition enter-active-class="animated flash"
-                                leave-active-class="animated fadeOut">
-                        <span v-if="rivalRoundPts" class="round-score">{{rivalRoundPts}}+  </span>
-                    </transition>
-                    <span class="total-score">{{rivalPtsToDisplay}}</span>
-                </h2>
-            </div>
-            <div class="static-info rival">
+            <div class="username animated fadeIn">
                 <h3 v-if="rival">{{rival.username}}</h3>
-                <h3 v-else-if="waitingForRival">Waiting for opponent</h3>
-                <h3 v-else>No opponent</h3>
+                <!-- <h3 v-else-if="waitingForRival">Waiting for opponent</h3>
+                <h3 v-else>No opponent</h3> -->
+            </div>
+            <div class="avatar-and-score rival">
+                <div class="live-score animated fadeIn">
+                    <h2 v-if="rival">
+                        <transition enter-active-class="animated flash"
+                                    leave-active-class="animated fadeOut">
+                            <span v-if="rivalRoundPts" class="round-score">{{rivalRoundPts}}+  </span>
+                        </transition>
+                        <span class="total-score">{{rivalPtsToDisplay}}</span>
+                    </h2>
+                </div>
                 <div class="player-img">
                     <img v-if="rival" :src="rival.avatar" alt="rival avatar">
                 </div>
@@ -104,18 +108,20 @@ export default {
     .player {
         font-size: 1.3em;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
         &.rival {
-            color: var(--rival-color)
+            color: var(--rival-color);
+            align-items: flex-end;
         }
         &.myself {
-            color: var(--player-color)
+            color: var(--player-color);
+            align-items: flex-start;
         }
         .player-img {
-            width: 2.4em;
-            height: 2.4em;
+            width: 2.5em;
+            height: 2.5em;
             border-radius: 50%;
+            border: 3px solid;
             overflow: hidden;
             img {
                 max-height: 100%;
@@ -123,9 +129,9 @@ export default {
                 max-width: none;
             }
         }
-        div:not(:last-child) {
-            margin-right: .5rem;
-        }
+        // div:not(:last-child) {
+        //     margin-right: .5rem;
+        // }
         h2, h3 {
             font-weight: 500;
         }
@@ -143,15 +149,13 @@ export default {
     }
 }
 
-.static-info.user {
-    h3 {
-        color: var(--player-color)
+.avatar-and-score {
+    display: flex;
+    &.rival {
+        justify-content: flex-end;
     }
-}
-
-.static-info.rival {
-    h3 {
-        color: var(--rival-color)
+    div:not(:last-child) {
+        margin-right: .5rem;
     }
 }
 

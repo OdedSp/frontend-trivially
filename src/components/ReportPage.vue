@@ -71,7 +71,7 @@ export default {
       } else {
         this.currQuestReportIdx = -1
         // setTimeout(() => {
-          this.currQuestReportIdx = this.report.length-1
+          this.currQuestReportIdx = this.report.length - 1
         // }, 1000);
       }
     },
@@ -175,7 +175,7 @@ export default {
 
 .pagination {
   color: var(--answer-color);
-  &:hover {
+  &:hover, &:focus, &:active {
     color: var(--answer-color);
   }
 }

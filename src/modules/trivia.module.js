@@ -3,7 +3,11 @@ import axios from 'axios'
 import TriviaService from '../services/TriviaService'
 import EventBus, { RIGHT_ANSWER, RIVAL_DISCONNECTED, GAME_WON } from '../services/BusService'
 
+import { SET_USER_STAT } from './user.module'
+
+export const RESET_GAME = 'trivia/resetGame'
 export const ROUND_START_TIME = 'trivia/setRoundStartTime'
+export const FIRST_ROUND = 'trivia/firstRound'
 export const GAME_COMPLETED = 'trivia/handleGameCompleted'
 export const RIVAL_LEFT = 'trivia/handleRivalLeft'
 // export const ANSWER_TIME = 'trivia/getAnswerTime'
@@ -27,13 +31,13 @@ const state = {
     correctAnswerId: null,
 
     userTotalPts: 0,
+    // userStatObj: null,
 
     rival: null,
     rivalTotalPts: 0,
+
     winner: null,
-    
     gameStartTime: null,
-    
     waitingForRival: false
     
     // userName: null,
@@ -42,7 +46,7 @@ const mutations = {
     SOCKET_WAITINGFORRIVAL(state) {
         state.waitingForRival = true
     },
-    SOCKET_FIRSTROUND(state, { quest, rival, createdAt }) {
+    [FIRST_ROUND](state, { quest, rival, createdAt }) {
         console.log({rival})
         state.roundReports = []
         state.waitingForRival = false
@@ -75,11 +79,18 @@ const mutations = {
     SOCKET_ANSWERWAS(state, answerId) {
         state.correctAnswerId = answerId
     },
+    [RESET_GAME](state) {
+        state.rival = null
+        state.userTotalPts = 0
+        state.rivalTotalPts = 0
+        state.gameStartTime = null
+        state.winner = null
+    },
     [ROUND_START_TIME](state, { startTime }) {
         state.roundStartTime = startTime
     },
     [GAME_COMPLETED](state) {
-        if (state.userTotalPts > state.rivalTotalPts) {
+        if (state.rival && state.userTotalPts > state.rivalTotalPts) {
             state.winner = 'user'
             EventBus.$emit(GAME_WON)
         } else if (state.userTotalPts < state.rivalTotalPts) {
@@ -89,10 +100,10 @@ const mutations = {
         }
         if (state.quest) TriviaService.pushRoundReport(state)
         state.quest = null
-        state.rival = null
-        state.userTotalPts = 0
-        state.rivalTotalPts = 0
-        state.gameStartTime = null
+        // state.rival = null
+        // state.userTotalPts = 0
+        // state.rivalTotalPts = 0
+        // state.gameStartTime = null
     },
     [RIVAL_LEFT](state) {
         state.rivalTotalPts = 0
@@ -106,27 +117,33 @@ const mutations = {
     // }
 }
 const actions = {
+    socket_firstRound({ state, commit }, payload) {
+        commit({ type: SET_USER_STAT, statObj: payload.player.statObj })
+        commit({ type: FIRST_ROUND, ...payload })
+    },
     socket_gameCompleted({ state, commit, getters }) {
-        var win = state.userTotalPts >= state.rivalTotalPts
-        var game_time = state.gameStartTime
+        var win = state.userTotalPts > state.rivalTotalPts
+        var gameStartTime = state.gameStartTime
+        var pts = state.userTotalPts
         commit(GAME_COMPLETED)
         var user = getters.currUser
         if (!user || !user._id) return
-        var statObj = {
+        var gameStat = {
             userId: user._id,
-            game_results: {
-                game_time,
+            gameResults: {
+                gameStartTime,
                 win,
-                total_questions: state.roundReports.length,
-                correct_questions: state.roundReports.filter(({ userPts }) => !!userPts).length
+                totalQuestions: state.roundReports.length,
+                correctQuestions: state.roundReports.filter(({ userPts }) => !!userPts).length,
+                pts
             } 
         }
-        axios.post(`${BASE_ROUTE}/statistic`, statObj)
+        axios.post(`${BASE_ROUTE}/statistic`, gameStat)
         .catch(err => console.warn('An error occured while trying to update last game\'s user stats:', err))
     },
     socket_rivalLeft({ dispatch, commit }) {
-        EventBus.$emit(RIVAL_DISCONNECTED)
         commit(RIVAL_LEFT)
+        EventBus.$emit(RIVAL_DISCONNECTED)
         dispatch('socket_gameCompleted')
     }
 }
