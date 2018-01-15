@@ -1,6 +1,5 @@
 <template>
   <div>
-    <comets-cmp/>
     <div v-if="!currUser && !gameStarted" class="buttons user-info">
       <button class="button is-white is-small is-outlined is-rounded" @click="openLogin">Log In</button>
       <!-- <button class="button is-info" @click="openSignUp">Sign Up</button> -->
@@ -37,7 +36,6 @@
 
 <script>
 import UserCount from './UserCount';
-import CometsCmp from './CometsCmp';
 
 import { mapGetters } from 'vuex'
 
@@ -75,14 +73,22 @@ export default {
   },
   components: {
     UserCount,
-    CometsCmp
+    // CometsCmp
   }
 };
 </script>
 
 <style lang="scss" scoped>
+
+@font-face {
+ font-family: Julian;
+ src: url('../assets/ARJULIAN.ttf')
+}
+
 h1 {
   font-weight: bold;
+  font-family: Julian;
+  font-size: 80px;
   span {
     color: black;
   }

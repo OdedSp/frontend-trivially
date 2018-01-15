@@ -5,9 +5,9 @@
             <img src="../imgs/logo-small.png" />
           </router-link>
         </div>
-        <!-- <div v-if="userIsLoggedIn" class="user-logout">
-          <button @click="logout" class="button is-info">Logout</button>
-        </div> -->
+        <div v-if="userIsLoggedIn" class="user-logout">
+          <button @click="logout" class="button is-info is-inverted is-outlined is-small">Logout</button>
+        </div>
     </nav>
 </template>
 
@@ -33,12 +33,12 @@ export default {
 
 <style scoped>
   .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     z-index: 10;
   }
   .user-logout{
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 90%;
+    margin-right: 10px;;
   }
 </style>
