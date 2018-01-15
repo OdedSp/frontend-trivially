@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import answerCmp from './answerCmp'
+import AnswerCmp from './AnswerCmp'
 
 import { ROUND_START_TIME } from '../modules/trivia.module'
 
@@ -50,7 +50,7 @@ export default {
     }
   },
   components: {
-      answerCmp
+      AnswerCmp
   },
   created() {
       !this.startTime

@@ -1,13 +1,16 @@
 <template>
   <div>
+    <comets-cmp/>
     <div v-if="!currUser && !gameStarted" class="buttons user-info">
-      <button class="button is-success" @click="openLogin">Log In</button>
-      <button class="button is-success" @click="openSignUp">Sign Up</button>
+      <button class="button is-white is-small is-outlined is-rounded" @click="openLogin">Log In</button>
+      <!-- <button class="button is-info" @click="openSignUp">Sign Up</button> -->
+    <user-count/>
     </div>
     <div v-if="currUser && !gameStarted" class="status-bar">
       <div class="user">
         <p>Hello {{currUser.username}}</p>
       </div>
+    <user-count/>
     </div>
     <transition leave-active-class="animated zoomOut">
       <section class="game-start" v-if="!gameStarted">
@@ -22,25 +25,19 @@
         </section>
         <div class="info-container">
           <div class="button-container">
-            <button class="button is-info btn-1" @click="startGame">
+            <button class="button is-success is-medium btn-1 is-rounded" @click="startGame">
               Play<span v-if="!currUser">&nbsp;as Guest</span>
             </button>
           </div>
         </div>
       </section>
     </transition>
-
-    <!-- <sign-up v-show="signUpShow" @closeComp="signUpShow=false" @createUser="createUser"></sign-up> -->
-    <!-- <log-in v-show="loginShow" @closeComp="loginShow=false" @loginUser="loginUser"></log-in>   -->
-
-    <!-- <results-page v-if="true" @playAgain="startGame" @review="showReview"></results-page>
-    <report-page v-if="showReport"></report-page> -->
   </div>
 </template>
 
 <script>
-import SignUp from './SignUp';
-import LogIn from './LogIn';
+import UserCount from './UserCount';
+import CometsCmp from './CometsCmp';
 
 import { mapGetters } from 'vuex'
 
@@ -77,8 +74,8 @@ export default {
     }
   },
   components: {
-    SignUp,
-    LogIn
+    UserCount,
+    CometsCmp
   }
 };
 </script>
@@ -107,7 +104,6 @@ h1 {
 }
 
 .status-bar{
-  margin: auto;
   margin: 10px;
 }
 
@@ -117,7 +113,8 @@ h1 {
 }
 
 .buttons {
-  margin: 10px
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 10px 0px 10px
 }
-
 </style>

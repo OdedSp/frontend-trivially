@@ -30,7 +30,7 @@
 
 <script>
 import QuestReport from './QuestReport';
-import timeLeftBar from './timeLeftBar';
+import TimeLeftBar from './TimeLeftBar';
 
 export default {
   data() {
@@ -81,7 +81,7 @@ export default {
   },
   components: {
     QuestReport,
-    timeLeftBar
+    TimeLeftBar
   }
 }
 </script>

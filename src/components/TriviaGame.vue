@@ -44,7 +44,7 @@
 import QuestCmp from './QuestCmp'
 import ScoreBoard from './ScoreBoard'
 import CountDown from './CountDown'
-import timeLeftBar from './timeLeftBar'
+import TimeLeftBar from './TimeLeftBar'
 // import { ANSWER_TIME } from '../modules/trivia.module';
 
 import { mapGetters } from 'vuex'
@@ -123,7 +123,7 @@ export default {
     QuestCmp,
     ScoreBoard,
     CountDown,
-    timeLeftBar
+    TimeLeftBar
   },
   created() {
     // if (this.$store.getters.gameInProgress) return
