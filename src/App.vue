@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <comets-cmp/>
     <transition enter-active-class="animated slideInDown">
       <nav-bar v-if="showNav" />
     </transition>
@@ -17,6 +18,7 @@
 
 <script>
 import navBar from './components/NavBar'
+import CometsCmp from './components/CometsCmp';
 
 import EventBus, { RIGHT_ANSWER, GAME_WON } from './services/BusService'
 
@@ -41,7 +43,8 @@ export default {
     }
   },
   components: {
-    navBar
+    navBar,
+    CometsCmp
   },
   created() {
     if (this.$route.name !== 'HomePage') this.showNav = true

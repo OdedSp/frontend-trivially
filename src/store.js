@@ -5,6 +5,7 @@ import triviaModule from './modules/trivia.module'
 const store = new Vuex.Store({
     state: {
         socketConnected: false,
+        userCount: null
     },
     mutations: {
         SOCKET_CONNECT(state, socket) {
@@ -12,6 +13,9 @@ const store = new Vuex.Store({
         },
         SOCKET_DISCONNECT(state, socket) {
             state.socketConnected = false
+        },
+        SOCKET_CONNECTEDCOUNT(state, count) {
+            state.userCount = count
         }
     },
     modules: {

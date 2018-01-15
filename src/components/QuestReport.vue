@@ -17,13 +17,13 @@
 </template>
 
 <script>
-import answerCmp from './answerCmp'
+import AnswerCmp from './AnswerCmp'
 import QuestStats from './QuestStats'
 
 export default {
   props: ['questReport'],
   components: {
-    answerCmp,
+    AnswerCmp,
     QuestStats
   }
 };
