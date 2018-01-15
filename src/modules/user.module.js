@@ -8,7 +8,7 @@ export const SET_USER_STAT = 'user/setUserStatObj'
 
 const state = {
     currUser: StorageService.load(USER),
-    userIsLoggedIn: !!this.currUser
+    userIsLoggedIn: !!StorageService.load(USER)
 }
 
 const mutations = {
