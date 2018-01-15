@@ -3,7 +3,8 @@
 
     <transition>
       <score-board :currRound="currRound" :user="currUser" :waitingForRival="waitingForRival"
-                   :rival="rival" :nextRound="showQuest">
+                   :rival="rival" :nextRound="showQuest"
+                   v-if="quest && !showKickOff">
       </score-board>
     </transition>
 
@@ -21,7 +22,7 @@
     <transition enter-active-class="animated flipInX">
       <count-down @countedDown="seeNextQuest"
                   :category="quest.category"  :img="quest.categoryImg"
-                  v-if="!showQuest && countdown"></count-down>
+                  v-if="quest && !showQuest && showCountdown"></count-down>
     </transition>
 
     <transition enter-active-class="animated fadeIn">
@@ -35,7 +36,10 @@
 
     <time-left-bar v-if="timeToAnswer !== null" :timeToAnswer="timeToAnswer"
             :playerAnswerTime="playerAnswerTime" :rivalAnswerTime="rivalAnswerTime"></time-left-bar>
-    
+
+    <!-- <transition enter-active-class="animated zoomIn"> -->
+      <kick-off v-if="showKickOff" @kickedOff="closeKickOff" :user="currUser" :rival="rival" />
+    <!-- </transitiofn> -->
     
   </section>
 </template>
@@ -43,23 +47,26 @@
 <script>
 import QuestCmp from './QuestCmp'
 import ScoreBoard from './ScoreBoard'
+import KickOff from './KickOffGame'
 import CountDown from './CountDown'
 import TimeLeftBar from './TimeLeftBar'
 // import { ANSWER_TIME } from '../modules/trivia.module';
 
 import { mapGetters } from 'vuex'
+import { RESET_GAME } from '../modules/trivia.module'
 import EventBus, { RIVAL_DISCONNECTED } from '../services/BusService'
 
 export default {
   data() {
     return {
-      countdown: false,
+      showCountdown: false,
       showQuest: false,
-      rivalLeft: false,
+      // rivalLeft: false,
       showRivalLeft: false,
       timeToAnswer: null,
       timerId: null,
-      answered: false
+      answered: false,
+      showKickOff: false
     };
   },
   computed: {
@@ -79,14 +86,12 @@ export default {
     }
   },
   watch: {
-    quest() {
-      this.showQuest = false
-      this.timeToAnswer = null
-      this.answered = false
-      clearInterval(this.timerId)
-      if (this.quest) setTimeout(_=> this.countdown = true, 1000)
-      else if (this.rivalLeft) return
-      else this.$router.push('gamedone') // for now
+    quest(curr, prev) {
+      if (!prev) {
+        this.showKickOff = true
+        return
+      }
+      this.setNextRound()
     }
   },
   methods: {
@@ -97,12 +102,21 @@ export default {
       // this.$store.commit({type: ANSWER_TIME, answerTime})
     },
     startGame() {
-      this.rivalLeft = false
+      // this.rivalLeft = false
       this.showRivalLeft = false
       this.$socket.emit('joinGameRoom', { username: this.currUser.username, avatar: this.currUser.avatar, _id: this.currUser._id})
     },
+    setNextRound() {
+      this.showQuest = false
+      this.timeToAnswer = null
+      this.answered = false
+      clearInterval(this.timerId)
+      if (this.quest) setTimeout(_=> this.showCountdown = true, 1000)
+      else if (!this.rival) return
+      else this.$router.push('gamedone')
+    },
     seeNextQuest() {
-      this.countdown = false
+      this.showCountdown = false
       this.timeToAnswer = 10
       this.showQuest = true
     },
@@ -115,33 +129,39 @@ export default {
         }
       }, 1000)
     },
-    destroyed() {
-      clearInterval(this.timerId)
+    closeKickOff() {
+      this.showKickOff = false
+      this.setNextRound()
     }
   },
   components: {
     QuestCmp,
     ScoreBoard,
     CountDown,
-    TimeLeftBar
+    TimeLeftBar,
+    KickOff
+  },
+  beforeCreate() {
+    this.$store.commit(RESET_GAME)
   },
   created() {
-    // if (this.$store.getters.gameInProgress) return
     EventBus.$on(RIVAL_DISCONNECTED, _=> {
-      this.rivalLeft = true
-      setTimeout(_=> this.showRivalLeft = true, 1000)
+      // this.rivalLeft = true
+      setTimeout(_=> {
+        clearTimeout(this.timerId)
+        this.showCountdown = false
+        this.timeToAnswer = null
+        this.showRivalLeft = true
+      }, 1000)
     })
     if (!this.currUser) this.$store.commit('setUser', { username: 'Me',
                                                         avatar: 'http://res.cloudinary.com/koolshooz/image/upload/v1515061041/avatar.png',
                                                         _id: null  }) // temporary (hopefully)
-    // if (this.quest) {
-    //   this.showQuest = true
-    //   return
-    // }
     this.startGame()
   },
   destroyed() {
     this.$socket.emit('leftGame')
+    clearInterval(this.timerId)
   }
 };
 </script>

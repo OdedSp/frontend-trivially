@@ -1,6 +1,6 @@
 <template>
   <div class="question-wrapper">
-      <h2 v-html="quest.txt" class="question animated slideInDown"></h2>
+      <h2 v-html="quest.txt" class="question animated bounceInUp"></h2>
       <img v-if="quest.img" class="question-img" :src="quest.img" />
       <!-- <img class="question-img" src="../../imgs/quests/magic-the-gathering.jpg" /> -->
       <div class="answer-wrapper">
@@ -58,7 +58,7 @@ export default {
               this.showAnswers = true
               this.$emit('startTheClock')
               this.$store.commit({ type: ROUND_START_TIME, startTime: Date.now() })
-      }, 500)
+      }, 1000)
       : this.showAnswers = true
   }
 };
