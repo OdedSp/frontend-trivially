@@ -1,0 +1,12 @@
+{
+    "name": "TrivYou",
+    "short_name": "TrivYou",
+    "start_url": ".",
+    "display": "standalone",
+    "description": "A trivia game against people from around the world.",
+    "icons": [{
+        "src": "./src/imgs/icon-small.png",
+        "sizes": "77x77",
+        "type": "image/png"
+      }]
+  }
