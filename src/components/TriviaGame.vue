@@ -8,9 +8,12 @@
       </score-board>
     </transition>
 
-    <div v-if="waitingForRival" class="spinner">
-      <div class="dot1"></div>
-      <div class="dot2"></div>
+    <div v-if="waitingForRival" class="spinner-wrapper">
+      <div class="spinner">
+      <!-- <div v-if="waitingForRival" class="spinner"> -->
+        <div class="dot1"></div>
+        <div class="dot2"></div>
+      </div>
     </div>
     
     <transition leave-active-class="animated slideOutRight">
@@ -189,4 +192,11 @@ export default {
     font-size: 1.3em;
     margin: 1.3em auto;
   }
+
+.spinner-wrapper {
+  height: 85%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
