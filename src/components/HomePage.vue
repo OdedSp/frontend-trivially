@@ -7,7 +7,7 @@
     </div>
     <div v-if="currUser && !gameStarted" class="status-bar">
       <div class="user">
-        <p>Hello {{currUser.username}}</p>
+        <span>Hello {{currUser.username}}</span>
       </div>
     <user-count/>
     </div>
@@ -31,14 +31,15 @@
         </div>
       </section>
     </transition>
+    <button v-if="currUser" class="button is-white is-small is-outlined is-rounded log-out-button" @click="logOut">Log Out</button>
   </div>
 </template>
 
 <script>
 import UserCount from './UserCount';
+import { LOGOUT_USER } from '../modules/user.module'
 
 import { mapGetters } from 'vuex'
-
 
 export default {
   name: "HomePage",
@@ -65,6 +66,9 @@ export default {
     loginUser(userObj) {
       this.$store.dispatch("loginUser", userObj);
       this.loginShow = false;
+    },
+    logOut(){
+      this.$store.dispatch({type: LOGOUT_USER})
     },
     startGame() {
       this.gameStarted = true
@@ -122,5 +126,11 @@ h1 {
   display: flex;
   justify-content: space-between;
   margin: 10px 10px 0px 10px
+}
+
+.log-out-button {
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
 }
 </style>

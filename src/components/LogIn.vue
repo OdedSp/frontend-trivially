@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div> -->
     <div class="login-page-container">
       <h1 class="title is-1">Login</h1>
         <form @submit.prevent="sendUser">
@@ -18,8 +18,11 @@
             <button class="button is-light" @submit="sendUser">Submit</button>
           </div>
         </form>
+        <div class="goto-signup">
+          New user? <router-link to="/signup" class="link">Sign Up!</router-link>
+        </div>
     </div>
-    </div>
+    <!-- </div> -->
 </template>
 
 <script>
@@ -69,5 +72,19 @@ export default {
   }
   .title {
     color: #6db8d2;
+  }
+
+  .goto-signup {
+    font-size: 1.5em;
+    margin: 1.5em;
+    position: relative;
+    z-index: 10;
+  }
+
+  .goto-signup .link {
+    transition: all .3s;
+  }
+  .goto-signup .link:hover {
+    color: #00bcd4;
   }
 </style>
